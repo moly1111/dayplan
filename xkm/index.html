@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极懒计划表 - XKM</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="./css/xkm.css">
+</head>
+<body>
+    <!-- 顶部时间 -->
+    <div id="xkm-clock" class="xkm-clock">--:--:--</div>
+
+    <!-- 顶部提示条 -->
+    <div id="warning-bar" class="warning-bar">
+        <div class="warning-content">
+            <p>本工具的所有数据仅存储在本地浏览器中，不会同步或上传到云端。<br>
+            清理浏览器数据或更换设备将导致数据永久丢失。<br>
+            建议定期使用右上角「备份」功能保存数据。<br>
+            Data is stored locally only and cannot be recovered if lost. Please back up regularly.</p>
+            <div class="warning-buttons">
+                <button id="close-warning">关闭</button>
+                <button id="dismiss-warning">永久关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置按钮 -->
+    <button id="settings-btn" class="settings-btn" title="设置">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.6066 12.5C15.4566 12.7333 15.2833 12.95 15.0916 13.1416L13.1416 15.0916C12.95 15.2833 12.7333 15.4566 12.5 15.6066V17.5C12.5 17.7761 12.2761 18 12 18H8C7.72386 18 7.5 17.7761 7.5 17.5V15.6066C7.26667 15.4566 7.05 15.2833 6.85833 15.0916L4.90833 13.1416C4.71667 12.95 4.54333 12.7333 4.39333 12.5H2.5C2.22386 12.5 2 12.2761 2 12V8C2 7.72386 2.22386 7.5 2.5 7.5H4.39333C4.54333 7.26667 4.71667 7.05 4.90833 6.85833L6.85833 4.90833C7.05 4.71667 7.26667 4.54333 7.5 4.39333V2.5C7.5 2.22386 7.72386 2 8 2H12C12.2761 2 12.5 2.22386 12.5 2.5V4.39333C12.7333 4.54333 12.95 4.71667 13.1416 4.90833L15.0916 6.85833C15.2833 7.05 15.4566 7.26667 15.6066 7.5H17.5C17.7761 7.5 18 7.72386 18 8V12C18 12.2761 17.7761 12.5 17.5 12.5H15.6066Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <!-- 设置面板 -->
+    <div id="settings-panel" class="settings-panel hidden">
+        <div class="settings-content">
+            <h3>设置</h3>
+            
+            <div class="settings-section">
+                <h4>数据</h4>
+                <div class="settings-item">
+                    <button id="export-btn">备份</button>
+                    <button id="import-btn">导入</button>
+                    <input type="file" id="import-input" accept=".json" style="display: none;">
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h4>顶部提醒</h4>
+                <div class="settings-item">
+                    <label>
+                        <input type="checkbox" id="show-warning-checkbox">
+                        显示本地存储警告
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h4>完成任务特效</h4>
+                <div class="settings-item">
+                    <label>
+                        <input type="checkbox" id="kill-animation-checkbox">
+                        动画开关
+                    </label>
+                </div>
+                <div class="settings-item">
+                    <label>
+                        <input type="checkbox" id="kill-sound-checkbox">
+                        音效开关
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h4>外观</h4>
+                <div class="settings-item">
+                    <label>
+                        <input type="radio" name="theme" value="light" id="theme-light">
+                        Light
+                    </label>
+                    <label>
+                        <input type="radio" name="theme" value="dark" id="theme-dark">
+                        Dark
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 左上：日历 -->
+        <div class="calendar-section">
+            <div id="calendar"></div>
+        </div>
+
+        <!-- 右上：计划区 -->
+        <div class="tasks-section">
+            <h2 id="date-title">Today</h2>
+            
+            <div class="task-input-container">
+                <input type="text" id="task-input" placeholder="添加计划，按 Enter 确认">
+            </div>
+
+            <div id="pending-tasks" class="tasks-list"></div>
+        </div>
+    </div>
+
+    <!-- 下方：已完成计划（折叠） -->
+    <div class="completed-section">
+        <details>
+            <summary>Completed</summary>
+            <div id="completed-tasks" class="tasks-list"></div>
+        </details>
+    </div>
+
+    <!-- 底部声明 -->
+    <footer class="footer">
+        <p>数据丢失将无法找回，请定期备份并妥善保存。<br>
+        Data cannot be recovered if lost. Please back up regularly.</p>
+    </footer>
+
+    <!-- 音效（隐藏） -->
+    <audio id="kill-sound" preload="auto">
+        <source src="../assets/audio/kill.wav" type="audio/wav">
+    </audio>
+
+    <script src="../app/storage.js"></script>
+    <script src="../app/calendar.js"></script>
+    <script src="../app/settings.js"></script>
+    <script src="../app/main.js"></script>
+    <script src="./js/xkm-main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,20 @@
+.timer-shell {
+    max-width: 720px;
+    margin: 80px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.timer-shell h1 {
+    margin-bottom: 16px;
+    font-size: 26px;
+}
+
+#timer-root {
+    min-height: 120px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    padding: 24px;
+    color: #888;
+}
+

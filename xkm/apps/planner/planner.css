@@ -1,0 +1,16 @@
+.planner-shell {
+    max-width: 720px;
+    margin: 80px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.planner-shell h1 {
+    margin-bottom: 12px;
+    font-size: 26px;
+}
+
+.planner-shell p {
+    color: #666;
+}
+
