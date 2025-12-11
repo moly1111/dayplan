@@ -1,0 +1,57 @@
+/
+├─ index.html                # 根站：极简 dayplan 主站
+├─ assets/                   # 公共资源（图片、字体、通用样式）
+│   ├─ css/
+│   │   ├─ base.css          # 全局基础样式（字体、reset等）
+│   │   ├─ layout.css        # 通用布局类
+│   │   └─ theme.css         # 主题色、暗色模式等
+│   ├─ js/
+│   │   ├─ utils.js          # 通用工具函数（localStorage封装、日期工具等）
+│   │   └─ analytics.js      # 将来如果要加统计/埋点可以在这
+│   ├─ img/
+│   └─ fonts/
+│
+├─ app/                      # 根站用到的主要前端逻辑（如果有）
+│   ├─ main.js
+│   └─ ... 
+│
+├─ xkm/                      # xkm 个人宇宙
+│   ├─ index.html            # 个人主控台（类似个人首页 / 控制面板）
+│   ├─ css/
+│   │   └─ xkm.css           # 个人站专用样式
+│   ├─ js/
+│   │   ├─ xkm-main.js       # 个人站主页逻辑
+│   │   ├─ mood.js           # 情绪记录/实验功能
+│   │   ├─ planner.js        # 你的私人定制计划表
+│   │   └─ dashboard.js      # 各种统计、图表
+│   ├─ apps/                 # 子应用区域（按功能拆）
+│   │   ├─ planner/          # 个人专用计划表 2.0
+│   │   │   ├─ index.html
+│   │   │   ├─ planner.js
+│   │   │   └─ planner.css
+│   │   ├─ diary/
+│   │   │   ├─ index.html
+│   │   │   └─ diary.js
+│   │   ├─ flow-lab/
+│   │   │   ├─ index.html    # “玩家之心”、“心流通道”实验空间
+│   │   │   └─ flow.js
+│   │   └─ ...
+│   └─ data-schema.md        # 你自己记一下本地数据结构（说明文档，方便以后维护）
+│
+└─ pro/                      # 面向所有人的 PRO 功能区
+    ├─ index.html            # pro 首页：所有工具的导航清单
+    ├─ css/
+    │   └─ pro.css
+    ├─ js/
+    │   └─ pro-main.js
+    ├─ tools/
+    │   ├─ focus-timer/      # 专注计时器
+    │   │   ├─ index.html
+    │   │   ├─ timer.js
+    │   │   └─ timer.css
+    │   ├─ weekly-review/    # 自动周回顾工具（举例）
+    │   │   ├─ index.html
+    │   │   └─ review.js
+    │   └─ ...
+    └─ docs/
+        └─ readme.md         # 给未来使用者看的工具说明 / changelog

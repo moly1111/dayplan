@@ -1,0 +1,98 @@
+{
+  "settings": {
+    "showWarning": false,
+    "killAnimation": true,
+    "killSound": true,
+    "theme": "dark"
+  },
+  "tasks": {
+    "2025-11-29": {
+      "pending": [],
+      "completed": [
+        {
+          "id": 8,
+          "text": "完成网站"
+        },
+        {
+          "id": 1,
+          "text": "整理房间，丢垃圾"
+        },
+        {
+          "id": 9,
+          "text": "整理youtube-ruri视频"
+        },
+        {
+          "id": 7,
+          "text": "有氧运动"
+        },
+        {
+          "id": 4,
+          "text": "确认监督工作的相关事宜"
+        }
+      ]
+    },
+    "2025-11-30": {
+      "pending": [],
+      "completed": [
+        {
+          "id": 1,
+          "text": "域名绑定该网站"
+        },
+        {
+          "id": 3,
+          "text": "读完第一篇研究方向论文"
+        },
+        {
+          "id": 4,
+          "text": "背托业单词"
+        },
+        {
+          "id": 5,
+          "text": "见cxy"
+        }
+      ]
+    },
+    "2025-12-01": {
+      "pending": [],
+      "completed": [
+        {
+          "id": 1,
+          "text": "力扣"
+        },
+        {
+          "id": 2,
+          "text": "监督事项"
+        },
+        {
+          "id": 3,
+          "text": "力量训练"
+        },
+        {
+          "id": 4,
+          "text": "背诵托业单词"
+        },
+        {
+          "id": 5,
+          "text": "英语听力"
+        }
+      ]
+    },
+    "2025-12-02": {
+      "pending": [
+        {
+          "id": 1,
+          "text": "背单词"
+        },
+        {
+          "id": 2,
+          "text": "英语听力"
+        },
+        {
+          "id": 3,
+          "text": "咖啡"
+        }
+      ],
+      "completed": []
+    }
+  }
+}

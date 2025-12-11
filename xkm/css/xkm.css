@@ -1,0 +1,11 @@
+.xkm-clock {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 12px 16px;
+    margin: 4px auto 12px;
+    color: var(--text-color);
+    font-variant-numeric: tabular-nums;
+}
+

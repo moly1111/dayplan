@@ -1,0 +1,41 @@
+.pro-container {
+    max-width: 960px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    margin-bottom: 24px;
+    font-size: 28px;
+}
+
+.pro-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.pro-card {
+    padding: 18px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background: #fff;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pro-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+}
+
+.tool-name {
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.tool-desc {
+    color: #666;
+    font-size: 14px;
+}
+

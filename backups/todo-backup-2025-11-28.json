@@ -1,0 +1,43 @@
+{
+  "settings": {
+    "showWarning": false,
+    "killAnimation": true,
+    "killSound": true,
+    "theme": "dark"
+  },
+  "tasks": {
+    "2025-11-29": {
+      "pending": [
+        {
+          "id": 1,
+          "text": "整理房间，丢垃圾"
+        },
+        {
+          "id": 2,
+          "text": "背诵托业单词"
+        },
+        {
+          "id": 3,
+          "text": "完成一份托业试卷（abceed）"
+        },
+        {
+          "id": 4,
+          "text": "确认监督工作的相关事宜"
+        },
+        {
+          "id": 5,
+          "text": "下载所有研究方向论文"
+        },
+        {
+          "id": 6,
+          "text": "读完第一篇研究方向论文"
+        },
+        {
+          "id": 7,
+          "text": "有氧运动"
+        }
+      ],
+      "completed": []
+    }
+  }
+}
