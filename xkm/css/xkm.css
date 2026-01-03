@@ -9,3 +9,93 @@
     font-variant-numeric: tabular-nums;
 }
 
+/* 任务预估时间功能样式 */
+.task-item-content {
+    position: relative;
+}
+
+.task-estimate-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    flex-shrink: 0;
+    padding-left: 10px;
+}
+
+.task-estimate-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.task-estimate-btn:hover:not(:disabled) {
+    background-color: var(--hover-bg);
+    border-color: var(--today-border);
+}
+
+.task-estimate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.task-estimate-display {
+    min-width: 60px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    background-color: var(--dot-completed);
+    color: #ffffff;
+    border-radius: 4px;
+    border: 1px solid var(--dot-completed);
+    white-space: nowrap;
+}
+
+.task-estimate-display.error {
+    background-color: var(--dot-overdue);
+    border-color: var(--dot-overdue);
+}
+
+/* Dark 主题下的显示区域颜色调整 */
+body.dark .task-estimate-display {
+    background-color: var(--dot-completed);
+    border-color: var(--dot-completed);
+}
+
+body.dark .task-estimate-display.error {
+    background-color: var(--dot-overdue);
+    border-color: var(--dot-overdue);
+}
+
+/* 总用时显示样式 */
+.total-time-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    background-color: var(--task-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.total-time-label {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.total-time-value {
+    color: var(--dot-planned);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
