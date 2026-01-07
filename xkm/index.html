@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>计划表 - XKM</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="css/xkm.css">
+    <!-- 在线上环境使用绝对路径，确保 /xkm 下引用正常 -->
+    <link rel="stylesheet" href="/xkm/css/xkm.css">
 </head>
 <body>
     <!-- 顶部时间 -->
@@ -152,10 +153,11 @@
     <script src="../app/storage.js"></script>
     <script src="../app/calendar.js"></script>
     <script src="../app/settings.js"></script>
+    <!-- 先加载 xkm 专用扩展，再加载主逻辑，确保初始渲染就有预估按钮和时间 -->
+    <script src="/xkm/js/deepseek-api.js"></script>
+    <script src="/xkm/js/xkm-tasks-extension.js"></script>
     <script src="../app/main.js"></script>
-    <script src="js/deepseek-api.js"></script>
-    <script src="js/xkm-tasks-extension.js"></script>
-    <script src="js/xkm-main.js"></script>
+    <script src="/xkm/js/xkm-main.js"></script>
 </body>
 </html>
 
