@@ -38,10 +38,23 @@
                 }
             });
             
+            // 计算今天的剩余时间（分钟）
+            const now = new Date();
+            const today = new Date();
+            today.setHours(23, 59, 59, 999);
+            const remainingMinutes = Math.max(0, Math.floor((today - now) / (1000 * 60)));
+            
             // 更新显示
             const totalTimeValue = totalTimeDisplay.querySelector('.total-time-value');
             if (totalTimeValue) {
                 totalTimeValue.textContent = `${totalMinutes} 分钟`;
+                
+                // 如果总用时超过剩余时间，显示为红色
+                if (totalMinutes > remainingMinutes && remainingMinutes > 0) {
+                    totalTimeDisplay.classList.add('over-limit');
+                } else {
+                    totalTimeDisplay.classList.remove('over-limit');
+                }
             }
         }
         
@@ -136,16 +149,11 @@
                             // 更新总用时
                             updateTotalTime();
                         } catch (error) {
-                            // 显示错误信息
+                            // 显示错误信息（保持红色状态，不再自动恢复为绿色）
                             estimateDisplay.textContent = '预估失败';
                             estimateDisplay.style.display = 'block';
                             estimateDisplay.classList.add('error');
                             console.error('预估时间失败:', error);
-                            
-                            // 3秒后清除错误状态
-                            setTimeout(() => {
-                                estimateDisplay.classList.remove('error');
-                            }, 3000);
                         } finally {
                             estimateBtn.disabled = false;
                         }

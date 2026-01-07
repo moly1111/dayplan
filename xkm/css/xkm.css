@@ -99,3 +99,7 @@ body.dark .task-estimate-display.error {
     font-variant-numeric: tabular-nums;
 }
 
+.total-time-display.over-limit .total-time-value {
+    color: #ff0000;
+}
+

@@ -21,7 +21,9 @@ const Storage = {
                 showWarning: true,
                 killAnimation: true,
                 killSound: false,
-                theme: 'light'
+                theme: 'light',
+                // DeepSeek API Key（仅存储在本地，供 xkm 版本使用）
+                deepseekApiKey: ''
             },
             tasks: {}
         };
