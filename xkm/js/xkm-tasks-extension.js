@@ -141,7 +141,8 @@
                                 task.estimatedMinutes = minutes;
                             }
                             
-                            // 显示结果
+                            // 显示结果（成功时清除错误状态）
+                            estimateDisplay.classList.remove('error');
                             estimateDisplay.textContent = `${minutes} 分钟`;
                             estimateDisplay.style.display = 'block';
                             estimateBtn.textContent = '预期完成时间';

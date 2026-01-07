@@ -6,7 +6,8 @@ function formatTime(date) {
     const hh = pad(date.getHours());
     const mi = pad(date.getMinutes());
     const ss = pad(date.getSeconds());
-    return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+    // 使用「日期 · 时间」形式，视觉上把日期和时间分开一些
+    return `${yyyy}-${mm}-${dd} · ${hh}:${mi}:${ss}`;
   }
   
   function initClock() {
