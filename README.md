@@ -1,7 +1,8 @@
 # Dayplan / 计划表
 
-一个纯前端、零后端、无账号的每日计划表工具，所有数据仅存浏览器 `localStorage`。主站是经典极简待办，`xkm` 为带 AI 预估时间的定制版。
-已部署且免费使用：https://www.dayplan.me
+- 一个纯前端、零后端、无账号的每日计划表工具，所有数据仅存浏览器 `localStorage`。主站是经典极简待办，`xkm` 为带 AI 预估时间的个人定制版。
+- 已部署至：https://www.dayplan.me 与 https://www.dayplan.me/xkm
+- 免费访问使用
 
 ## 功能总览（主站）
 - 日历导航：点击日期快速切换当天计划
