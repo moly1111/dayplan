@@ -25,6 +25,7 @@ const Settings = {
         const killSoundCheckbox = document.getElementById('kill-sound-checkbox');
         const themeLight = document.getElementById('theme-light');
         const themeDark = document.getElementById('theme-dark');
+        const deepseekApiKeyInput = document.getElementById('deepseek-api-key-input');
         
         if (showWarningCheckbox) {
             showWarningCheckbox.checked = settings.showWarning;
@@ -40,6 +41,9 @@ const Settings = {
         }
         if (themeDark) {
             themeDark.checked = settings.theme === 'dark';
+        }
+        if (deepseekApiKeyInput) {
+            deepseekApiKeyInput.value = settings.deepseekApiKey || '';
         }
     },
 
@@ -92,6 +96,7 @@ const Settings = {
         // 主题切换
         const themeLight = document.getElementById('theme-light');
         const themeDark = document.getElementById('theme-dark');
+        const deepseekApiKeyInput = document.getElementById('deepseek-api-key-input');
         
         if (themeLight) {
             themeLight.addEventListener('change', (e) => {
@@ -109,6 +114,22 @@ const Settings = {
                     document.body.classList.add('dark');
                 }
             });
+        }
+
+        // DeepSeek API Key 输入
+        if (deepseekApiKeyInput) {
+            let saveTimer = null;
+            const saveApiKey = () => {
+                const value = deepseekApiKeyInput.value.trim();
+                Storage.saveSettings({ deepseekApiKey: value });
+            };
+
+            deepseekApiKeyInput.addEventListener('input', () => {
+                if (saveTimer) clearTimeout(saveTimer);
+                saveTimer = setTimeout(saveApiKey, 400);
+            });
+
+            deepseekApiKeyInput.addEventListener('blur', saveApiKey);
         }
         
         // 导出按钮

@@ -1,4 +1,4 @@
-// DeepSeek API 调用模块
+// DeepSeek API 调用模块（从本地设置中读取 API Key）
 const DeepSeekAPI = {
     /**
      * 预估任务完成时间（分钟）
@@ -6,9 +6,15 @@ const DeepSeekAPI = {
      * @returns {Promise<number>} - 预估时间（分钟）
      */
     async estimateTaskTime(taskText) {
-        if (!DEEPSEEK_CONFIG || !DEEPSEEK_CONFIG.apiKey) {
-            throw new Error('API Key 未配置，请在 xkm/js/api-config.js 中设置 DEEPSEEK_API_KEY');
+        const settings = Storage.getSettings ? Storage.getSettings() : {};
+        const apiKey = settings.deepseekApiKey || '';
+
+        if (!apiKey) {
+            throw new Error('API Key 未配置，请在设置中填写 DeepSeek API Key');
         }
+
+        const apiUrl = 'https://api.deepseek.com/chat/completions';
+        const model = 'deepseek-chat';
 
         const systemPrompt = `你是一个任务时间估算专家。请根据用户提供的任务描述，估算完成该任务需要的时间（以分钟为单位）。
 
@@ -25,14 +31,14 @@ const DeepSeekAPI = {
         const userPrompt = `请估算完成以下任务需要的时间（分钟）：${taskText}`;
 
         try {
-            const response = await fetch(DEEPSEEK_CONFIG.apiUrl, {
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${DEEPSEEK_CONFIG.apiKey}`
+                    'Authorization': `Bearer ${apiKey}`
                 },
                 body: JSON.stringify({
-                    model: DEEPSEEK_CONFIG.model,
+                    model,
                     messages: [
                         { role: 'system', content: systemPrompt },
                         { role: 'user', content: userPrompt }
