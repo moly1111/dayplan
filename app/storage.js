@@ -23,7 +23,9 @@ const Storage = {
                 killSound: false,
                 theme: 'light',
                 // DeepSeek API Key（仅存储在本地，供 xkm 版本使用）
-                deepseekApiKey: ''
+                deepseekApiKey: '',
+                // 快捷任务（仅存储在本地，供 xkm 版本使用）
+                quickTasks: ['喝水', '短暂休息5分钟', '复盘/整理']
             },
             tasks: {}
         };

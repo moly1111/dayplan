@@ -442,6 +442,17 @@ body {
     font-weight: 600;
 }
 
+.tasks-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.tasks-header h2 {
+    margin-bottom: 0;
+}
+
 .task-input-container {
     margin-bottom: 20px;
 }

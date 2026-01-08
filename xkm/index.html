@@ -116,7 +116,21 @@
 
         <!-- 右上：计划区 -->
         <div class="tasks-section">
-            <h2 id="date-title">Today</h2>
+            <div class="tasks-header">
+                <h2 id="date-title">Today</h2>
+                <div class="quick-tasks-wrapper">
+                    <button id="quick-tasks-btn" class="quick-tasks-btn">快捷任务</button>
+                    <div id="quick-tasks-panel" class="quick-tasks-panel hidden">
+                        <div class="quick-tasks-title">常用任务</div>
+                        <div id="quick-tasks-list" class="quick-tasks-list"></div>
+                        <div class="quick-tasks-editor">
+                            <input type="text" id="quick-task-input" placeholder="输入常用任务内容">
+                            <button id="quick-task-add" class="quick-task-add-btn">添加</button>
+                        </div>
+                        <div class="quick-tasks-tip">数据仅存本地，可随时编辑</div>
+                    </div>
+                </div>
+            </div>
             
             <div class="task-input-container">
                 <input type="text" id="task-input" placeholder="添加计划，按 Enter 确认">
@@ -156,6 +170,7 @@
     <!-- 先加载 xkm 专用扩展，再加载主逻辑，确保初始渲染就有预估按钮和时间 -->
     <script src="/xkm/js/deepseek-api.js"></script>
     <script src="/xkm/js/xkm-tasks-extension.js"></script>
+    <script src="/xkm/js/xkm-quick-tasks.js"></script>
     <script src="../app/main.js"></script>
     <script src="/xkm/js/xkm-main.js"></script>
 </body>
