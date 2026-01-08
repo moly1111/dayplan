@@ -110,3 +110,176 @@ body.dark .task-estimate-display.error {
     color: #ff0000;
 }
 
+/* 快捷任务样式 */
+.quick-tasks-wrapper {
+    position: relative;
+}
+
+.quick-tasks-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.quick-tasks-btn:hover {
+    background-color: var(--hover-bg);
+    border-color: var(--today-border);
+}
+
+.quick-tasks-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 320px;
+    background-color: var(--settings-bg);
+    border: 1px solid var(--settings-border);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.quick-tasks-panel.hidden {
+    display: none;
+}
+
+.quick-tasks-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-color);
+}
+
+.quick-tasks-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 12px;
+    min-height: 60px;
+    max-height: 200px;
+}
+
+.quick-tasks-empty {
+    text-align: center;
+    color: var(--completed-text);
+    font-size: 13px;
+    padding: 20px 0;
+}
+
+.quick-task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.quick-task-item:hover {
+    background-color: var(--hover-bg);
+}
+
+.quick-task-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text-color);
+    margin-right: 8px;
+    word-break: break-word;
+}
+
+.quick-task-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.quick-task-use-btn,
+.quick-task-edit-btn,
+.quick-task-delete-btn {
+    padding: 3px 8px;
+    font-size: 11px;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    font-family: inherit;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.quick-task-use-btn:hover {
+    background-color: var(--dot-planned);
+    border-color: var(--dot-planned);
+    color: #ffffff;
+}
+
+.quick-task-edit-btn:hover {
+    background-color: var(--hover-bg);
+    border-color: var(--today-border);
+}
+
+.quick-task-delete-btn:hover {
+    background-color: var(--dot-overdue);
+    border-color: var(--dot-overdue);
+    color: #ffffff;
+}
+
+.quick-tasks-editor {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.quick-tasks-editor input {
+    flex: 1;
+    padding: 6px 10px;
+    font-size: 13px;
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-family: inherit;
+}
+
+.quick-tasks-editor input:focus {
+    outline: none;
+    border-color: var(--today-border);
+}
+
+.quick-task-add-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    background-color: var(--dot-planned);
+    color: #ffffff;
+    border: 1px solid var(--dot-planned);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.quick-task-add-btn:hover {
+    background-color: var(--today-border);
+    border-color: var(--today-border);
+}
+
+.quick-tasks-tip {
+    font-size: 11px;
+    color: var(--completed-text);
+    text-align: center;
+    margin-top: 4px;
+}
+
