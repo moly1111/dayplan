@@ -214,6 +214,27 @@ body.dark .task-estimate-display.error {
     color: #ffffff;
     border-radius: 3px;
     font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.quick-task-time-badge:hover {
+    opacity: 0.85;
+}
+
+.quick-task-estimate-btn {
+    font-size: 11px;
+    padding: 2px 6px;
+    background-color: var(--border-color);
+    color: var(--text-color);
+    border-radius: 3px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.quick-task-estimate-btn:hover {
+    background-color: var(--dot-planned);
+    color: #ffffff;
 }
 
 .quick-task-actions {

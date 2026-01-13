@@ -48,12 +48,29 @@
                 taskText.className = 'quick-task-text';
                 taskText.textContent = task;
                 
-                // 如果有预估时间，显示时间标签
+                // 如果有预估时间，显示时间标签（可编辑）
                 if (estimatedMinutes !== null && estimatedMinutes !== undefined) {
                     const timeBadge = document.createElement('span');
                     timeBadge.className = 'quick-task-time-badge';
                     timeBadge.textContent = `${estimatedMinutes}分钟`;
+                    timeBadge.title = '双击可编辑时间';
+                    timeBadge.style.cursor = 'pointer';
+                    timeBadge.ondblclick = (e) => {
+                        e.stopPropagation();
+                        this.editTaskTime(index, taskObj, timeBadge);
+                    };
                     taskText.appendChild(timeBadge);
+                } else {
+                    // 如果没有预估时间，显示"预估"按钮
+                    const estimateBtn = document.createElement('span');
+                    estimateBtn.className = 'quick-task-estimate-btn';
+                    estimateBtn.textContent = '预估';
+                    estimateBtn.title = '点击预估时间';
+                    estimateBtn.onclick = async (e) => {
+                        e.stopPropagation();
+                        await this.estimateTaskTime(index, taskObj);
+                    };
+                    taskText.appendChild(estimateBtn);
                 }
 
                 const actions = document.createElement('div');
@@ -142,6 +159,58 @@
                 };
                 this.saveQuickTasks(tasks);
                 this.loadQuickTasks();
+            }
+        },
+
+        // 编辑任务预估时间
+        editTaskTime(index, taskObj, timeBadge) {
+            // 兼容旧格式
+            const currentMinutes = typeof taskObj === 'object' ? taskObj.estimatedMinutes : null;
+            const currentMinutesValue = currentMinutes !== null && currentMinutes !== undefined ? currentMinutes : 0;
+            
+            const newMinutesStr = prompt('修改预估时间（分钟）：', currentMinutesValue);
+            if (newMinutesStr !== null) {
+                const newMinutes = parseInt(newMinutesStr, 10);
+                if (!isNaN(newMinutes) && newMinutes >= 0) {
+                    const tasks = this.getQuickTasks();
+                    // 确保是对象格式
+                    if (typeof tasks[index] === 'string') {
+                        tasks[index] = { text: tasks[index], estimatedMinutes: newMinutes };
+                    } else {
+                        tasks[index].estimatedMinutes = newMinutes;
+                    }
+                    this.saveQuickTasks(tasks);
+                    this.loadQuickTasks();
+                } else {
+                    alert('请输入有效的数字（≥0）');
+                }
+            }
+        },
+
+        // 预估任务时间
+        async estimateTaskTime(index, taskObj) {
+            // 兼容旧格式
+            const taskText = typeof taskObj === 'string' ? taskObj : taskObj.text;
+            
+            try {
+                if (typeof DeepSeekAPI === 'undefined' || !DeepSeekAPI.estimateTaskTime) {
+                    alert('DeepSeek API 未配置，请在设置中填写 API Key');
+                    return;
+                }
+                
+                const minutes = await DeepSeekAPI.estimateTaskTime(taskText);
+                const tasks = this.getQuickTasks();
+                // 确保是对象格式
+                if (typeof tasks[index] === 'string') {
+                    tasks[index] = { text: tasks[index], estimatedMinutes: minutes };
+                } else {
+                    tasks[index].estimatedMinutes = minutes;
+                }
+                this.saveQuickTasks(tasks);
+                this.loadQuickTasks();
+            } catch (error) {
+                console.error('预估时间失败:', error);
+                alert('预估时间失败：' + (error.message || '未知错误'));
             }
         },
 
