@@ -25,7 +25,12 @@ const Storage = {
                 // DeepSeek API Key（仅存储在本地，供 xkm 版本使用）
                 deepseekApiKey: '',
                 // 快捷任务（仅存储在本地，供 xkm 版本使用）
-                quickTasks: ['喝水', '短暂休息5分钟', '复盘/整理']
+                // 格式：[{ text: '任务内容', estimatedMinutes: 30 }, ...]
+                quickTasks: [
+                    { text: '喝水', estimatedMinutes: null },
+                    { text: '短暂休息5分钟', estimatedMinutes: 5 },
+                    { text: '复盘/整理', estimatedMinutes: null }
+                ]
             },
             tasks: {}
         };

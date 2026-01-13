@@ -107,6 +107,9 @@
                     if (task.estimatedMinutes) {
                         estimateDisplay.textContent = `${task.estimatedMinutes} 分钟`;
                         estimateDisplay.style.display = 'block';
+                        // 添加编辑图标提示
+                        estimateDisplay.title = '双击可编辑时间';
+                        estimateDisplay.style.cursor = 'pointer';
                     }
                     
                     // 按钮点击事件
@@ -160,6 +163,12 @@
                         }
                     };
                     
+                    // 双击预估时间可编辑
+                    estimateDisplay.ondblclick = (e) => {
+                        e.stopPropagation();
+                        this.editEstimatedTime(task, estimateDisplay);
+                    };
+                    
                     estimateContainer.appendChild(estimateBtn);
                     estimateContainer.appendChild(estimateDisplay);
                     
@@ -174,6 +183,35 @@
             }
             
             return taskEl;
+        };
+
+        // 编辑预估时间
+        Tasks.editEstimatedTime = function(task, estimateDisplay) {
+            const currentMinutes = task.estimatedMinutes || 0;
+            const newMinutesStr = prompt('修改预估时间（分钟）：', currentMinutes);
+            
+            if (newMinutesStr !== null) {
+                const newMinutes = parseInt(newMinutesStr, 10);
+                if (!isNaN(newMinutes) && newMinutes >= 0) {
+                    // 更新任务数据
+                    const currentDateStr = Tasks.currentDateStr || Calendar.formatDate(new Date());
+                    const tasks = Storage.getTasksByDate(currentDateStr);
+                    const taskIndex = tasks.pending.findIndex(t => t.id === task.id);
+                    if (taskIndex !== -1) {
+                        tasks.pending[taskIndex].estimatedMinutes = newMinutes;
+                        Storage.saveTasksByDate(currentDateStr, tasks);
+                        // 更新任务对象
+                        task.estimatedMinutes = newMinutes;
+                        // 更新显示
+                        estimateDisplay.textContent = `${newMinutes} 分钟`;
+                        estimateDisplay.classList.remove('error');
+                        // 更新总用时
+                        updateTotalTime();
+                    }
+                } else {
+                    alert('请输入有效的数字（≥0）');
+                }
+            }
         };
 
         console.log('XKM 任务扩展模块已加载');
