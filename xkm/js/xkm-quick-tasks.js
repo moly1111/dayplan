@@ -36,13 +36,25 @@
                 return;
             }
 
-            tasks.forEach((task, index) => {
+            tasks.forEach((taskObj, index) => {
+                // 兼容旧格式（字符串）和新格式（对象）
+                const task = typeof taskObj === 'string' ? taskObj : taskObj.text;
+                const estimatedMinutes = typeof taskObj === 'object' ? taskObj.estimatedMinutes : null;
+
                 const taskItem = document.createElement('div');
                 taskItem.className = 'quick-task-item';
 
                 const taskText = document.createElement('span');
                 taskText.className = 'quick-task-text';
                 taskText.textContent = task;
+                
+                // 如果有预估时间，显示时间标签
+                if (estimatedMinutes !== null && estimatedMinutes !== undefined) {
+                    const timeBadge = document.createElement('span');
+                    timeBadge.className = 'quick-task-time-badge';
+                    timeBadge.textContent = `${estimatedMinutes}分钟`;
+                    taskText.appendChild(timeBadge);
+                }
 
                 const actions = document.createElement('div');
                 actions.className = 'quick-task-actions';
@@ -53,7 +65,7 @@
                 addBtn.title = '添加到今日任务';
                 addBtn.onclick = (e) => {
                     e.stopPropagation();
-                    this.addToToday(task);
+                    this.addToToday(task, estimatedMinutes);
                 };
 
                 const editBtn = document.createElement('button');
@@ -62,7 +74,7 @@
                 editBtn.title = '编辑此任务';
                 editBtn.onclick = (e) => {
                     e.stopPropagation();
-                    this.editTask(index, task);
+                    this.editTask(index, taskObj);
                 };
 
                 const deleteBtn = document.createElement('button');
@@ -85,11 +97,22 @@
         },
 
         // 添加到今日任务
-        addToToday(taskText) {
+        async addToToday(taskText, estimatedMinutes = null) {
             if (!taskText || !taskText.trim()) return;
 
             if (typeof Tasks !== 'undefined' && Tasks.currentDateStr) {
                 const taskId = Storage.addTask(Tasks.currentDateStr, taskText.trim());
+                
+                // 如果有保存的预估时间，直接设置
+                if (estimatedMinutes !== null && estimatedMinutes !== undefined) {
+                    const tasks = Storage.getTasksByDate(Tasks.currentDateStr);
+                    const taskIndex = tasks.pending.findIndex(t => t.id === taskId);
+                    if (taskIndex !== -1) {
+                        tasks.pending[taskIndex].estimatedMinutes = estimatedMinutes;
+                        Storage.saveTasksByDate(Tasks.currentDateStr, tasks);
+                    }
+                }
+                
                 if (window.Tasks && Tasks.loadTasks) {
                     Tasks.loadTasks(Tasks.currentDateStr);
                 }
@@ -104,11 +127,19 @@
         },
 
         // 编辑任务
-        editTask(index, currentText) {
+        editTask(index, currentTaskObj) {
+            // 兼容旧格式
+            const currentText = typeof currentTaskObj === 'string' ? currentTaskObj : currentTaskObj.text;
+            const currentMinutes = typeof currentTaskObj === 'object' ? currentTaskObj.estimatedMinutes : null;
+            
             const newText = prompt('编辑任务内容：', currentText);
             if (newText !== null && newText.trim() && newText.trim() !== currentText) {
                 const tasks = this.getQuickTasks();
-                tasks[index] = newText.trim();
+                // 保持原有的预估时间
+                tasks[index] = {
+                    text: newText.trim(),
+                    estimatedMinutes: currentMinutes
+                };
                 this.saveQuickTasks(tasks);
                 this.loadQuickTasks();
             }
@@ -124,8 +155,8 @@
             }
         },
 
-        // 添加新任务
-        addTask() {
+        // 添加新任务（自动预估时间）
+        async addTask() {
             const input = document.getElementById('quick-task-input');
             if (!input) return;
 
@@ -136,14 +167,47 @@
             }
 
             const tasks = this.getQuickTasks();
-            if (tasks.includes(text)) {
+            // 检查是否已存在（兼容新旧格式）
+            const exists = tasks.some(t => {
+                const taskText = typeof t === 'string' ? t : t.text;
+                return taskText === text;
+            });
+            
+            if (exists) {
                 alert('该任务已存在');
                 return;
             }
 
-            tasks.push(text);
+            // 创建新任务对象，先不设置预估时间
+            const newTask = { text: text, estimatedMinutes: null };
+            tasks.push(newTask);
             this.saveQuickTasks(tasks);
             this.loadQuickTasks();
+
+            // 自动预估时间
+            try {
+                if (typeof DeepSeekAPI !== 'undefined' && DeepSeekAPI.estimateTaskTime) {
+                    const minutes = await DeepSeekAPI.estimateTaskTime(text);
+                    // 更新刚添加的任务的预估时间
+                    const updatedTasks = this.getQuickTasks();
+                    const taskIndex = updatedTasks.findIndex(t => {
+                        const taskText = typeof t === 'string' ? t : t.text;
+                        return taskText === text;
+                    });
+                    if (taskIndex !== -1) {
+                        if (typeof updatedTasks[taskIndex] === 'string') {
+                            updatedTasks[taskIndex] = { text: updatedTasks[taskIndex], estimatedMinutes: minutes };
+                        } else {
+                            updatedTasks[taskIndex].estimatedMinutes = minutes;
+                        }
+                        this.saveQuickTasks(updatedTasks);
+                        this.loadQuickTasks();
+                    }
+                }
+            } catch (error) {
+                console.error('自动预估时间失败:', error);
+                // 即使预估失败，任务也已经添加了
+            }
 
             // 清空输入框
             input.value = '';
