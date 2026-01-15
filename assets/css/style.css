@@ -130,6 +130,9 @@ body {
     padding: 20px;
     z-index: 999;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* 内容较多时允许内部滚动，避免遮挡底部选项 */
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
 }
 
 .settings-panel.hidden {
