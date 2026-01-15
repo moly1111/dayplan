@@ -237,6 +237,31 @@ body.dark .task-estimate-display.error {
     color: #ffffff;
 }
 
+/* 今日完成彩带效果 */
+.confetti-piece {
+    position: fixed;
+    top: -10px;
+    width: 6px;
+    height: 14px;
+    background-color: #f5c518;
+    opacity: 0.9;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 9999;
+    animation-name: xkm-confetti-fall;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes xkm-confetti-fall {
+    0% {
+        transform: translateY(0) rotateZ(0deg);
+    }
+    100% {
+        transform: translateY(110vh) rotateZ(360deg);
+    }
+}
+
 .quick-task-actions {
     display: flex;
     gap: 4px;
