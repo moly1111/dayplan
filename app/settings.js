@@ -23,6 +23,8 @@ const Settings = {
         const showWarningCheckbox = document.getElementById('show-warning-checkbox');
         const killAnimationCheckbox = document.getElementById('kill-animation-checkbox');
         const killSoundCheckbox = document.getElementById('kill-sound-checkbox');
+        const todayCheerSoundCheckbox = document.getElementById('today-cheer-sound-checkbox');
+        const todayConfettiCheckbox = document.getElementById('today-confetti-checkbox');
         const themeLight = document.getElementById('theme-light');
         const themeDark = document.getElementById('theme-dark');
         const deepseekApiKeyInput = document.getElementById('deepseek-api-key-input');
@@ -35,6 +37,12 @@ const Settings = {
         }
         if (killSoundCheckbox) {
             killSoundCheckbox.checked = settings.killSound;
+        }
+        if (todayCheerSoundCheckbox) {
+            todayCheerSoundCheckbox.checked = !!settings.todayCheerSound;
+        }
+        if (todayConfettiCheckbox) {
+            todayConfettiCheckbox.checked = !!settings.todayConfetti;
         }
         if (themeLight) {
             themeLight.checked = settings.theme === 'light';
@@ -90,6 +98,22 @@ const Settings = {
         if (killSoundCheckbox) {
             killSoundCheckbox.addEventListener('change', (e) => {
                 Storage.saveSettings({ killSound: e.target.checked });
+            });
+        }
+
+        // 今日全部完成欢呼
+        const todayCheerSoundCheckbox = document.getElementById('today-cheer-sound-checkbox');
+        if (todayCheerSoundCheckbox) {
+            todayCheerSoundCheckbox.addEventListener('change', (e) => {
+                Storage.saveSettings({ todayCheerSound: e.target.checked });
+            });
+        }
+
+        // 今日全部完成彩带
+        const todayConfettiCheckbox = document.getElementById('today-confetti-checkbox');
+        if (todayConfettiCheckbox) {
+            todayConfettiCheckbox.addEventListener('change', (e) => {
+                Storage.saveSettings({ todayConfetti: e.target.checked });
             });
         }
         

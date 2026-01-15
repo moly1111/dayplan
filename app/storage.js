@@ -30,7 +30,10 @@ const Storage = {
                     { text: '喝水', estimatedMinutes: null },
                     { text: '短暂休息5分钟', estimatedMinutes: 5 },
                     { text: '复盘/整理', estimatedMinutes: null }
-                ]
+                ],
+                // 今日全部完成庆祝效果（仅 xkm 使用）
+                todayCheerSound: false,
+                todayConfetti: false
             },
             tasks: {}
         };
@@ -49,7 +52,10 @@ const Storage = {
     // 获取设置
     getSettings() {
         const data = this.getAllData();
-        return data.settings || this.getDefaultData().settings;
+        // 与默认设置合并，保证新增字段（如 todayCheerSound / todayConfetti）有默认值
+        const defaults = this.getDefaultData().settings;
+        const current = data.settings || {};
+        return { ...defaults, ...current };
     },
 
     // 保存设置

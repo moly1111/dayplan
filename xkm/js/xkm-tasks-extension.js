@@ -24,6 +24,9 @@
         
         // 保存原始的 addTask 方法
         const originalAddTask = Tasks.addTask;
+
+        // 记录今日是否已经处于“全部完成”状态，避免重复触发
+        let lastTodayCompleted = false;
         
         // 计算连续完成天数（从昨天往前推，不包括今天）
         function calculateStreakDays() {
@@ -85,6 +88,77 @@
             }
         }
         
+        // 计算今天是否全部完成（仅今天，且至少有一条已完成任务）
+        function isTodayFullyCompleted() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const todayStr = Calendar.formatDate(today);
+            const tasks = Storage.getTasksByDate(todayStr);
+            return tasks.pending.length === 0 && tasks.completed.length > 0;
+        }
+
+        // 可能触发“今日全部完成”庆祝效果
+        function maybeCelebrateTodayCompletion() {
+            const nowCompleted = isTodayFullyCompleted();
+            if (!lastTodayCompleted && nowCompleted) {
+                // 状态从“未全部完成”切换为“全部完成”，触发庆祝
+                const settings = Storage.getSettings();
+                console.log('[xkm] Today fully completed, settings:', {
+                    todayCheerSound: settings.todayCheerSound,
+                    todayConfetti: settings.todayConfetti
+                });
+
+                // 音效
+                if (settings.todayCheerSound) {
+                    const cheer = document.getElementById('today-cheer-sound');
+                    if (cheer) {
+                        try {
+                            cheer.currentTime = 0;
+                            const playPromise = cheer.play();
+                            if (playPromise && typeof playPromise.then === 'function') {
+                                playPromise.catch(err => {
+                                    console.warn('[xkm] Cheer sound play rejected by browser:', err);
+                                });
+                            }
+                        } catch (e) {
+                            console.warn('[xkm] Cheer sound play exception:', e);
+                        }
+                    } else {
+                        console.warn('[xkm] today-cheer-sound element not found');
+                    }
+                }
+
+                // 彩带（使用 canvas-confetti，如果可用）
+                if (settings.todayConfetti) {
+                    try {
+                        if (typeof confetti === 'function') {
+                            const duration = 7000;
+                            const end = Date.now() + duration;
+                            (function frame() {
+                                confetti({
+                                    particleCount: 7,
+                                    spread: 90,
+                                    startVelocity: 40,
+                                    gravity: 0.9,
+                                    // 延长存在时间，使彩带大约飘过页面三分之二高度后再消散
+                                    ticks: 350,
+                                    origin: { x: Math.random(), y: 0 }
+                                });
+                                if (Date.now() < end) {
+                                    requestAnimationFrame(frame);
+                                }
+                            })();
+                        } else {
+                            console.log('[xkm] canvas-confetti 未加载，跳过彩带效果');
+                        }
+                    } catch (e) {
+                        console.log('[xkm] Confetti failed:', e);
+                    }
+                }
+            }
+            lastTodayCompleted = nowCompleted;
+        }
+
         // 计算并更新总用时
         function updateTotalTime() {
             const totalTimeDisplay = document.getElementById('total-time-display');
@@ -121,24 +195,25 @@
             }
         }
         
-        // 扩展 loadTasks 方法，在加载任务后更新总用时和连续天数
+        // 扩展 loadTasks 方法，在加载任务后更新总用时、连续天数
         Tasks.loadTasks = function(dateStr) {
             originalLoadTasks.call(this, dateStr);
             updateTotalTime();
             updateStreakDays();
         };
         
-        // 扩展 completeTask 方法，在完成任务后更新总用时和连续天数
+        // 扩展 completeTask 方法，在完成任务后更新总用时、连续天数和今日完成状态
         Tasks.completeTask = function(taskId) {
             originalCompleteTask.call(this, taskId);
             // 延迟更新，等待动画完成
             setTimeout(() => {
                 updateTotalTime();
                 updateStreakDays();
+                maybeCelebrateTodayCompletion();
             }, 350);
         };
         
-        // 扩展 deleteTask 方法，在删除任务后更新总用时和连续天数
+        // 扩展 deleteTask 方法，在删除任务后更新总用时、连续天数
         Tasks.deleteTask = function(taskId, fromCompleted) {
             originalDeleteTask.call(this, taskId, fromCompleted);
             updateTotalTime();
@@ -290,9 +365,10 @@
 
         console.log('XKM 任务扩展模块已加载');
         
-        // 延迟更新连续天数，确保 Tasks.init() 已完成
+        // 延迟更新连续天数和今日完成状态，确保 Tasks.init() 已完成
         setTimeout(() => {
             updateStreakDays();
+            maybeCelebrateTodayCompletion();
         }, 100);
     }
 

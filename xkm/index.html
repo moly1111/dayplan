@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/assets/img/11.ico">
+    <link rel="shortcut icon" href="/assets/img/11.ico">
     <title>计划表 - XKM</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <!-- 在线上环境使用绝对路径，确保 /xkm 下引用正常 -->
@@ -70,6 +72,18 @@
                     <label>
                         <input type="checkbox" id="kill-sound-checkbox">
                         音效开关
+                    </label>
+                </div>
+                <div class="settings-item">
+                    <label>
+                        <input type="checkbox" id="today-cheer-sound-checkbox">
+                        今日全部完成时播放欢呼
+                    </label>
+                </div>
+                <div class="settings-item">
+                    <label>
+                        <input type="checkbox" id="today-confetti-checkbox">
+                        今日全部完成时飘落彩带
                     </label>
                 </div>
             </div>
@@ -166,6 +180,12 @@
     <audio id="kill-sound" preload="auto">
         <source src="../assets/audio/kill.wav" type="audio/wav">
     </audio>
+    <audio id="today-cheer-sound" preload="auto">
+        <source src="../assets/audio/applause.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- canvas-confetti 浏览器版本 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <script src="../app/storage.js"></script>
     <script src="../app/calendar.js"></script>
