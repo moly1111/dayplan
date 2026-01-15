@@ -22,6 +22,69 @@
         // 保存原始的 deleteTask 方法
         const originalDeleteTask = Tasks.deleteTask;
         
+        // 保存原始的 addTask 方法
+        const originalAddTask = Tasks.addTask;
+        
+        // 计算连续完成天数（从昨天往前推，不包括今天）
+        function calculateStreakDays() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            let streak = 0;
+            let checkDate = new Date(today);
+            checkDate.setDate(checkDate.getDate() - 1); // 从昨天开始
+            
+            // 往前推，直到遇到不满足条件的一天
+            while (true) {
+                const dateStr = Calendar.formatDate(checkDate);
+                const tasks = Storage.getTasksByDate(dateStr);
+                
+                // 判断条件：有已完成任务 && 没有未完成任务（对应绿色点状态）
+                const hasCompleted = tasks.completed.length > 0;
+                const hasNoPending = tasks.pending.length === 0;
+                
+                if (hasCompleted && hasNoPending) {
+                    streak++;
+                    // 继续往前推一天
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    // 遇到不满足条件的一天，停止
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+        
+        // 更新连续完成天数显示
+        function updateStreakDays() {
+            const streakDisplay = document.getElementById('streak-days');
+            if (!streakDisplay) return;
+            
+            // 检查当前选中的日期是否为今天
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const currentDateStr = Tasks.currentDateStr || Calendar.formatDate(today);
+            const selectedDate = new Date(currentDateStr + 'T00:00:00');
+            
+            // 只有今天是 Today 时才显示
+            if (!Calendar.isSameDate(selectedDate, today)) {
+                streakDisplay.textContent = '';
+                streakDisplay.style.display = 'none';
+                return;
+            }
+            
+            const streak = calculateStreakDays();
+            
+            if (streak >= 2) {
+                streakDisplay.textContent = `连续${streak}天`;
+                streakDisplay.style.display = 'inline';
+            } else {
+                streakDisplay.textContent = '';
+                streakDisplay.style.display = 'none';
+            }
+        }
+        
         // 计算并更新总用时
         function updateTotalTime() {
             const totalTimeDisplay = document.getElementById('total-time-display');
@@ -58,23 +121,34 @@
             }
         }
         
-        // 扩展 loadTasks 方法，在加载任务后更新总用时
+        // 扩展 loadTasks 方法，在加载任务后更新总用时和连续天数
         Tasks.loadTasks = function(dateStr) {
             originalLoadTasks.call(this, dateStr);
             updateTotalTime();
+            updateStreakDays();
         };
         
-        // 扩展 completeTask 方法，在完成任务后更新总用时
+        // 扩展 completeTask 方法，在完成任务后更新总用时和连续天数
         Tasks.completeTask = function(taskId) {
             originalCompleteTask.call(this, taskId);
             // 延迟更新，等待动画完成
-            setTimeout(updateTotalTime, 350);
+            setTimeout(() => {
+                updateTotalTime();
+                updateStreakDays();
+            }, 350);
         };
         
-        // 扩展 deleteTask 方法，在删除任务后更新总用时
+        // 扩展 deleteTask 方法，在删除任务后更新总用时和连续天数
         Tasks.deleteTask = function(taskId, fromCompleted) {
             originalDeleteTask.call(this, taskId, fromCompleted);
             updateTotalTime();
+            updateStreakDays();
+        };
+        
+        // 扩展 addTask 方法，在添加任务后更新连续天数
+        Tasks.addTask = function(text) {
+            originalAddTask.call(this, text);
+            updateStreakDays();
         };
 
         // 扩展 createTaskElement 方法
@@ -215,6 +289,11 @@
         };
 
         console.log('XKM 任务扩展模块已加载');
+        
+        // 延迟更新连续天数，确保 Tasks.init() 已完成
+        setTimeout(() => {
+            updateStreakDays();
+        }, 100);
     }
 
     // 在 DOM 加载完成后初始化

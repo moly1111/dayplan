@@ -9,9 +9,6 @@
     <link rel="stylesheet" href="/xkm/css/xkm.css">
 </head>
 <body>
-    <!-- 顶部时间 -->
-    <div id="xkm-clock" class="xkm-clock">--:--:--</div>
-
     <!-- 顶部提示条 -->
     <div id="warning-bar" class="warning-bar">
         <div class="warning-content">
@@ -25,6 +22,9 @@
             </div>
         </div>
     </div>
+
+    <!-- 顶部时间 -->
+    <div id="xkm-clock" class="xkm-clock">--:--:--</div>
 
     <!-- 设置按钮 -->
     <button id="settings-btn" class="settings-btn" title="设置">
@@ -117,7 +117,10 @@
         <!-- 右上：计划区 -->
         <div class="tasks-section">
             <div class="tasks-header">
-                <h2 id="date-title">Today</h2>
+                <div class="tasks-title-wrapper">
+                    <h2 id="date-title">Today</h2>
+                    <span id="streak-days" class="streak-days"></span>
+                </div>
                 <div class="quick-tasks-wrapper">
                     <button id="quick-tasks-btn" class="quick-tasks-btn">快捷任务</button>
                     <div id="quick-tasks-panel" class="quick-tasks-panel hidden">

@@ -449,8 +449,22 @@ body {
     margin-bottom: 20px;
 }
 
+.tasks-title-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
 .tasks-header h2 {
     margin-bottom: 0;
+}
+
+.streak-days {
+    font-size: 14px;
+    color: var(--completed-text);
+    opacity: 0.6;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
 }
 
 .task-input-container {
