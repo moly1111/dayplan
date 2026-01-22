@@ -216,6 +216,117 @@ body.dark .task-estimate-display.error {
     border-color: var(--dot-overdue);
 }
 
+/* 预期完成时间输入框（红框位置） */
+.task-estimate-input {
+    min-width: 100px;
+    padding: 4px 8px;
+    font-size: 12px;
+    text-align: center;
+    background-color: #ffffff;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    white-space: nowrap;
+    border-color: #ff0000; /* 红色边框 */
+}
+
+body.dark .task-estimate-input {
+    background-color: var(--bg-color);
+}
+
+/* 计时器容器 */
+.task-timer-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* 计时按钮 */
+.task-timer-btn {
+    min-width: 60px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.task-timer-btn:hover {
+    background-color: var(--hover-bg);
+    border-color: var(--today-border);
+}
+
+/* 计时显示区域（无背景，直接显示数字） */
+.task-timer-display {
+    min-width: 60px;
+    padding: 4px 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    white-space: nowrap;
+    transition: opacity 0.2s, color 0.2s;
+    cursor: pointer;
+    font-variant-numeric: tabular-nums;
+}
+
+.task-timer-display:hover {
+    opacity: 0.7;
+}
+
+/* 暂停状态：灰色、变淡 */
+.task-timer-display.paused {
+    color: #999999;
+    opacity: 0.5;
+}
+
+/* 计时器悬停菜单 */
+.task-timer-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    display: none;
+    flex-direction: column;
+    background-color: var(--settings-bg);
+    border: 1px solid var(--settings-border);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    min-width: 100px;
+    overflow: hidden;
+}
+
+.task-timer-menu-item {
+    padding: 6px 12px;
+    font-size: 12px;
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.task-timer-menu-item:last-child {
+    border-bottom: none;
+}
+
+.task-timer-menu-item:hover {
+    background-color: var(--hover-bg);
+}
+
 /* 总用时显示样式 */
 .total-time-display {
     display: flex;
