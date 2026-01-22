@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>长期计划 - Plan</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/plan/css/plan.css">
+    <link rel="icon" href="/assets/img/11.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- 设置按钮 -->
+    <button id="settings-btn" class="settings-btn" title="设置">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.6066 12.5C15.4566 12.7333 15.2833 12.95 15.0916 13.1416L13.1416 15.0916C12.95 15.2833 12.7333 15.4566 12.5 15.6066V17.5C12.5 17.7761 12.2761 18 12 18H8C7.72386 18 7.5 17.7761 7.5 17.5V15.6066C7.26667 15.4566 7.05 15.2833 6.85833 15.0916L4.90833 13.1416C4.71667 12.95 4.54333 12.7333 4.39333 12.5H2.5C2.22386 12.5 2 12.2761 2 12V8C2 7.72386 2.22386 7.5 2.5 7.5H4.39333C4.54333 7.26667 4.71667 7.05 4.90833 6.85833L6.85833 4.90833C7.05 4.71667 7.26667 4.54333 7.5 4.39333V2.5C7.5 2.22386 7.72386 2 8 2H12C12.2761 2 12.5 2.22386 12.5 2.5V4.39333C12.7333 4.54333 12.95 4.71667 13.1416 4.90833L15.0916 6.85833C15.2833 7.05 15.4566 7.26667 15.6066 7.5H17.5C17.7761 7.5 18 7.72386 18 8V12C18 12.2761 17.7761 12.5 17.5 12.5H15.6066Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    
+    <!-- 设置面板 -->
+    <div id="settings-panel" class="settings-panel hidden">
+        <div class="settings-content">
+            <h3>设置</h3>
+            <div class="settings-section">
+                <h4>外观</h4>
+                <label class="settings-item">
+                    <span>主题</span>
+                    <select id="theme-select">
+                        <option value="light">浅色</option>
+                        <option value="dark">深色</option>
+                    </select>
+                </label>
+            </div>
+            <div class="settings-section">
+                <h4>数据</h4>
+                <div class="settings-item">
+                    <button id="export-btn">备份</button>
+                    <button id="import-btn">导入</button>
+                    <input type="file" id="import-input" accept=".json" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="plan-container">
+        <!-- 月份导航 -->
+        <div class="plan-header">
+            <div class="plan-header-left">
+                <button class="plan-nav-btn" id="prev-month-btn">←</button>
+                <h1 class="plan-month-title" id="month-title">2025年1月</h1>
+                <button class="plan-nav-btn" id="next-month-btn">→</button>
+            </div>
+        </div>
+
+        <!-- 日历大表 -->
+        <div class="plan-calendar" id="plan-calendar">
+            <!-- 星期标题 -->
+            <div class="plan-weekdays">
+                <div class="plan-weekday">日</div>
+                <div class="plan-weekday">一</div>
+                <div class="plan-weekday">二</div>
+                <div class="plan-weekday">三</div>
+                <div class="plan-weekday">四</div>
+                <div class="plan-weekday">五</div>
+                <div class="plan-weekday">六</div>
+            </div>
+            <!-- 日期网格 -->
+            <div class="plan-grid" id="plan-grid">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 计划列表面板（点击日期时显示） -->
+        <div class="plan-list-panel hidden" id="plan-list-panel">
+            <div class="plan-list-header">
+                <h3 id="plan-list-date">2025年1月1日</h3>
+                <button class="plan-list-close" id="plan-list-close">×</button>
+            </div>
+            <div class="plan-list-content" id="plan-list-content">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 右键菜单 -->
+    <div class="plan-context-menu hidden" id="plan-context-menu">
+        <div class="plan-context-item" data-action="add-normal">添加普通计划</div>
+        <div class="plan-context-item" data-action="add-ebbinghaus">添加遗忘曲线计划</div>
+        <div class="plan-context-item" data-action="view-plans">查看该日期的计划</div>
+    </div>
+
+    <!-- 添加/编辑计划对话框 -->
+    <div class="plan-dialog-overlay hidden" id="plan-dialog-overlay">
+        <div class="plan-dialog">
+            <div class="plan-dialog-header">
+                <h3 id="plan-dialog-title">添加计划</h3>
+                <button class="plan-dialog-close" id="plan-dialog-close">×</button>
+            </div>
+            <div class="plan-dialog-content">
+                <div class="plan-dialog-field">
+                    <label>计划内容</label>
+                    <input type="text" id="plan-text-input" placeholder="输入计划内容...">
+                </div>
+                <div class="plan-dialog-field">
+                    <label>日期</label>
+                    <input type="text" id="plan-date-input" readonly>
+                </div>
+                <div class="plan-dialog-field" id="plan-preview-field" style="display: none;">
+                    <label>将自动添加到以下日期</label>
+                    <div class="plan-preview-dates" id="plan-preview-dates"></div>
+                </div>
+                <div class="plan-dialog-field" id="plan-edit-options" style="display: none;">
+                    <label>编辑范围</label>
+                    <div class="plan-edit-radio">
+                        <label>
+                            <input type="radio" name="edit-scope" value="current" checked>
+                            <span>仅当前日期</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="edit-scope" value="all">
+                            <span>所有相关日期</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="plan-dialog-actions">
+                <button class="plan-dialog-btn plan-dialog-cancel" id="plan-dialog-cancel">取消</button>
+                <button class="plan-dialog-btn plan-dialog-confirm" id="plan-dialog-confirm">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认对话框 -->
+    <div class="plan-dialog-overlay hidden" id="plan-delete-dialog-overlay">
+        <div class="plan-dialog plan-delete-dialog">
+            <div class="plan-dialog-header">
+                <h3>删除计划</h3>
+                <button class="plan-dialog-close" id="plan-delete-dialog-close">×</button>
+            </div>
+            <div class="plan-dialog-content">
+                <p id="plan-delete-message">确定要删除这个计划吗？</p>
+                <div class="plan-dialog-field" id="plan-delete-options" style="display: none;">
+                    <div class="plan-edit-radio">
+                        <label>
+                            <input type="radio" name="delete-scope" value="current" checked>
+                            <span>仅删除当前日期</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="delete-scope" value="all">
+                            <span>删除所有相关日期</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="plan-dialog-actions">
+                <button class="plan-dialog-btn plan-dialog-cancel" id="plan-delete-cancel">取消</button>
+                <button class="plan-dialog-btn plan-dialog-confirm" id="plan-delete-confirm">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="/plan/js/plan-storage.js"></script>
+    <script src="/plan/js/plan-calendar.js"></script>
+    <script src="/plan/js/plan-context-menu.js"></script>
+    <script src="/plan/js/plan-dialog.js"></script>
+    <script src="/plan/js/plan-main.js"></script>
+</body>
+</html>
+
