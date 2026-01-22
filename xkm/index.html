@@ -28,6 +28,14 @@
     <!-- 顶部时间 -->
     <div id="xkm-clock" class="xkm-clock">--:--:--</div>
 
+    <!-- 音乐按钮 -->
+    <div class="music-btn-wrapper">
+        <button id="music-btn" class="music-btn" title="背景音乐">♪</button>
+        <div class="volume-slider-container">
+            <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="50" orient="vertical">
+        </div>
+    </div>
+
     <!-- 设置按钮 -->
     <button id="settings-btn" class="settings-btn" title="设置">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -182,6 +190,10 @@
     </audio>
     <audio id="today-cheer-sound" preload="auto">
         <source src="../assets/audio/applause.mp3" type="audio/mpeg">
+    </audio>
+    <!-- 背景音乐 -->
+    <audio id="rain-music" preload="auto" loop>
+        <source src="../assets/audio/rain.mp3" type="audio/mpeg">
     </audio>
 
     <!-- canvas-confetti 浏览器版本 -->
