@@ -25,6 +25,7 @@ const Settings = {
         const killSoundCheckbox = document.getElementById('kill-sound-checkbox');
         const todayCheerSoundCheckbox = document.getElementById('today-cheer-sound-checkbox');
         const todayConfettiCheckbox = document.getElementById('today-confetti-checkbox');
+        const showTimerCheckbox = document.getElementById('show-timer-checkbox');
         const themeLight = document.getElementById('theme-light');
         const themeDark = document.getElementById('theme-dark');
         const deepseekApiKeyInput = document.getElementById('deepseek-api-key-input');
@@ -43,6 +44,9 @@ const Settings = {
         }
         if (todayConfettiCheckbox) {
             todayConfettiCheckbox.checked = !!settings.todayConfetti;
+        }
+        if (showTimerCheckbox) {
+            showTimerCheckbox.checked = settings.showTimer !== false; // 默认为 true
         }
         if (themeLight) {
             themeLight.checked = settings.theme === 'light';
@@ -114,6 +118,30 @@ const Settings = {
         if (todayConfettiCheckbox) {
             todayConfettiCheckbox.addEventListener('change', (e) => {
                 Storage.saveSettings({ todayConfetti: e.target.checked });
+            });
+        }
+        
+        // 显示计时功能
+        const showTimerCheckbox = document.getElementById('show-timer-checkbox');
+        if (showTimerCheckbox) {
+            showTimerCheckbox.addEventListener('change', (e) => {
+                const showTimer = e.target.checked;
+                Storage.saveSettings({ showTimer: showTimer });
+                
+                // 立即显示/隐藏所有计时器容器
+                const timerContainers = document.querySelectorAll('.task-timer-container');
+                timerContainers.forEach(container => {
+                    if (showTimer) {
+                        container.style.display = 'flex';
+                    } else {
+                        container.style.display = 'none';
+                    }
+                });
+                
+                // 重新加载任务以应用设置（确保新创建的任务也遵循设置）
+                if (window.Tasks && Tasks.loadTasks) {
+                    Tasks.loadTasks(Tasks.currentDateStr || Calendar.formatDate(new Date()));
+                }
             });
         }
         
