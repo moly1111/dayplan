@@ -22,6 +22,8 @@ const Storage = {
                 killAnimation: true,
                 killSound: false,
                 theme: 'light',
+                // 显示计时功能（仅 xkm 版本使用）
+                showTimer: true,
                 // DeepSeek API Key（仅存储在本地，供 xkm 版本使用）
                 deepseekApiKey: '',
                 // 快捷任务（仅存储在本地，供 xkm 版本使用）

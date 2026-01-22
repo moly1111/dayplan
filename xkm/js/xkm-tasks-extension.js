@@ -356,6 +356,11 @@
                         this.editEstimatedTime(task, estimateDisplay);
                     };
                     
+                    // 检查是否显示计时功能
+                    const settings = Storage.getSettings();
+                    // 明确检查：如果 showTimer 是 undefined 或 true，则显示；如果是 false，则隐藏
+                    const showTimer = settings.showTimer === undefined ? true : settings.showTimer === true;
+                    
                     // 获取或创建该任务的计时器（全局管理，不受任务重新渲染影响）
                     const timer = TimerManager.getTimer(task.id);
                     
@@ -698,7 +703,12 @@
                     timerContainer.appendChild(timerMenu);
                     
                     // 布局顺序：计时按钮（红框位置）-> "预期完成时间"按钮 -> 预估时间显示（绿色框）
+                    // 始终添加计时器容器到 DOM，通过样式控制显示/隐藏
                     estimateContainer.appendChild(timerContainer); // 计时按钮在红框位置
+                    // 根据设置决定是否显示
+                    if (!showTimer) {
+                        timerContainer.style.display = 'none';
+                    }
                     estimateContainer.appendChild(estimateBtn);
                     estimateContainer.appendChild(estimateDisplay);
                     
