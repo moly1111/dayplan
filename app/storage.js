@@ -24,6 +24,8 @@ const Storage = {
                 theme: 'light',
                 // 显示计时功能（仅 xkm 版本使用）
                 showTimer: true,
+                // 白噪音类型（仅 xkm 版本使用）：'rain' 或 'fire'
+                whiteNoiseType: 'rain',
                 // DeepSeek API Key（仅存储在本地，供 xkm 版本使用）
                 deepseekApiKey: '',
                 // 快捷任务（仅存储在本地，供 xkm 版本使用）
