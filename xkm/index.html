@@ -107,6 +107,20 @@
             </div>
 
             <div class="settings-section">
+                <h4>白噪音</h4>
+                <div class="settings-item">
+                    <label>
+                        <input type="radio" name="white-noise" value="rain" id="white-noise-rain">
+                        雨声
+                    </label>
+                    <label>
+                        <input type="radio" name="white-noise" value="fire" id="white-noise-fire">
+                        篝火
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
                 <h4>AI</h4>
                 <div class="settings-item">
                     <label class="settings-label-stack">
@@ -201,9 +215,13 @@
     <audio id="today-cheer-sound" preload="auto">
         <source src="/assets/audio/applause.mp3" type="audio/mpeg">
     </audio>
-    <!-- 背景音乐 -->
+    <!-- 背景音乐 - 雨声 -->
     <audio id="rain-music" preload="auto" loop>
         <source src="https://res.cloudinary.com/dht0q682g/video/upload/v1769063260/rain_min_juatkz.mp3" type="audio/mpeg">
+    </audio>
+    <!-- 背景音乐 - 篝火声 -->
+    <audio id="fire-music" preload="auto" loop>
+        <source src="https://res.cloudinary.com/dht0q682g/video/upload/v1769149577/fire_vcjzci.mp3" type="audio/mpeg">
     </audio>
 
     <!-- canvas-confetti 浏览器版本 -->

@@ -26,6 +26,8 @@ const Settings = {
         const todayCheerSoundCheckbox = document.getElementById('today-cheer-sound-checkbox');
         const todayConfettiCheckbox = document.getElementById('today-confetti-checkbox');
         const showTimerCheckbox = document.getElementById('show-timer-checkbox');
+        const whiteNoiseRain = document.getElementById('white-noise-rain');
+        const whiteNoiseFire = document.getElementById('white-noise-fire');
         const themeLight = document.getElementById('theme-light');
         const themeDark = document.getElementById('theme-dark');
         const deepseekApiKeyInput = document.getElementById('deepseek-api-key-input');
@@ -47,6 +49,12 @@ const Settings = {
         }
         if (showTimerCheckbox) {
             showTimerCheckbox.checked = settings.showTimer !== false; // 默认为 true
+        }
+        if (whiteNoiseRain) {
+            whiteNoiseRain.checked = (settings.whiteNoiseType || 'rain') === 'rain';
+        }
+        if (whiteNoiseFire) {
+            whiteNoiseFire.checked = (settings.whiteNoiseType || 'rain') === 'fire';
         }
         if (themeLight) {
             themeLight.checked = settings.theme === 'light';
@@ -143,6 +151,67 @@ const Settings = {
                     Tasks.loadTasks(Tasks.currentDateStr || Calendar.formatDate(new Date()));
                 }
             });
+        }
+        
+        // 白噪音切换
+        const whiteNoiseRain = document.getElementById('white-noise-rain');
+        const whiteNoiseFire = document.getElementById('white-noise-fire');
+        if (whiteNoiseRain) {
+            whiteNoiseRain.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    Storage.saveSettings({ whiteNoiseType: 'rain' });
+                    switchWhiteNoise('rain');
+                }
+            });
+        }
+        if (whiteNoiseFire) {
+            whiteNoiseFire.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    Storage.saveSettings({ whiteNoiseType: 'fire' });
+                    switchWhiteNoise('fire');
+                }
+            });
+        }
+        
+        // 切换白噪音函数
+        function switchWhiteNoise(type) {
+            const rainMusic = document.getElementById('rain-music');
+            const fireMusic = document.getElementById('fire-music');
+            const musicBtn = document.getElementById('music-btn');
+            
+            if (!rainMusic || !fireMusic || !musicBtn) return;
+            
+            const wasPlaying = !rainMusic.paused || !fireMusic.paused;
+            
+            // 停止当前播放的音乐
+            rainMusic.pause();
+            fireMusic.pause();
+            
+            // 根据类型切换音频源
+            if (type === 'rain') {
+                // 切换到雨声
+                if (wasPlaying) {
+                    rainMusic.currentTime = 0;
+                    rainMusic.play().catch(err => {
+                        console.error('播放雨声失败:', err);
+                    });
+                }
+            } else if (type === 'fire') {
+                // 切换到篝火声
+                if (wasPlaying) {
+                    fireMusic.currentTime = 0;
+                    fireMusic.play().catch(err => {
+                        console.error('播放篝火声失败:', err);
+                    });
+                }
+            }
+            
+            // 更新按钮状态
+            if (wasPlaying) {
+                musicBtn.classList.add('playing');
+            } else {
+                musicBtn.classList.remove('playing');
+            }
         }
         
         // 主题切换
