@@ -64,6 +64,9 @@
         // 记录今日是否已经处于"全部完成"状态，避免重复触发
         let lastTodayCompleted = false;
         
+        // 欢呼音效是否已解锁（浏览器要求在用户手势内先 play 一次，后续 setTimeout 中才能播放）
+        let cheerSoundUnlocked = false;
+        
         // 计算连续完成天数（从昨天往前推，不包括今天）
         function calculateStreakDays() {
             const today = new Date();
@@ -240,6 +243,26 @@
         
         // 扩展 completeTask 方法，在完成任务后更新总用时、连续天数和今日完成状态
         Tasks.completeTask = function(taskId) {
+            // 在用户手势内先“解锁”欢呼音效，否则 setTimeout 中播放会被浏览器阻止
+            if (!cheerSoundUnlocked) {
+                const settings = Storage.getSettings();
+                if (settings.todayCheerSound) {
+                    const cheer = document.getElementById('today-cheer-sound');
+                    if (cheer) {
+                        const savedVolume = cheer.volume;
+                        cheer.volume = 0;  // 静默解锁，避免杂音
+                        cheer.play().then(() => {
+                            cheer.pause();
+                            cheer.currentTime = 0;
+                            cheer.volume = savedVolume;
+                            cheerSoundUnlocked = true;
+                        }).catch(() => {
+                            cheer.volume = savedVolume;
+                        });
+                    }
+                }
+            }
+            
             originalCompleteTask.call(this, taskId);
             // 延迟更新，等待动画完成
             setTimeout(() => {
