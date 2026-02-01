@@ -255,6 +255,38 @@ const Tasks = {
 // 全局暴露 Tasks 对象供 Calendar 使用
 window.Tasks = Tasks;
 
+// 音效预加载与预热，减少首次播放延迟
+(function initSoundPreload() {
+    let killSoundWarmedUp = false;
+    
+    function warmUpKillSound() {
+        if (killSoundWarmedUp) return;
+        const sound = document.getElementById('kill-sound');
+        if (!sound) return;
+        try {
+            const vol = sound.volume;
+            sound.volume = 0;
+            sound.play().then(() => {
+                sound.pause();
+                sound.currentTime = 0;
+                sound.volume = vol;
+                killSoundWarmedUp = true;
+            }).catch(() => { sound.volume = vol; });
+        } catch (e) {}
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const sound = document.getElementById('kill-sound');
+        if (sound) sound.load();  // 强制立即加载
+        // 任务输入框获焦时预热（多数用户会先添加任务再完成）
+        document.getElementById('task-input')?.addEventListener('focus', warmUpKillSound, { once: true });
+    });
+    
+    // 首次点击/按键时预热（如点日历等，早于第一次完成任务）
+    document.addEventListener('click', warmUpKillSound, { once: true });
+    document.addEventListener('keydown', warmUpKillSound, { once: true });
+})();
+
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
     Calendar.init();
