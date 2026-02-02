@@ -263,6 +263,21 @@ window.Tasks = Tasks;
         if (killSoundWarmedUp) return;
         const sound = document.getElementById('kill-sound');
         if (!sound) return;
+        
+        // 检查音频是否已加载完成
+        if (sound.readyState < 2) {  // HAVE_CURRENT_DATA (2) 或更高才能播放
+            // 等待音频加载完成再预热
+            sound.addEventListener('canplay', () => {
+                if (!killSoundWarmedUp) {
+                    doWarmUp(sound);
+                }
+            }, { once: true });
+        } else {
+            doWarmUp(sound);
+        }
+    }
+    
+    function doWarmUp(sound) {
         try {
             const vol = sound.volume;
             sound.volume = 0;
@@ -271,7 +286,9 @@ window.Tasks = Tasks;
                 sound.currentTime = 0;
                 sound.volume = vol;
                 killSoundWarmedUp = true;
-            }).catch(() => { sound.volume = vol; });
+            }).catch(() => { 
+                sound.volume = vol; 
+            });
         } catch (e) {}
     }
     
