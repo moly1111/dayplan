@@ -82,7 +82,7 @@ export default function TasksList({ currentDateStr, onCalendarUpdate }) {
   return (
     <>
       <audio ref={audioRef} preload="auto">
-        <source src="/audio/kill.wav" type="audio/wav" />
+        <source src="https://res.cloudinary.com/dht0q682g/video/upload/v1770693498/kill_p2zs08.wav" type="audio/wav" />
       </audio>
       
       <h2 id="date-title">{getDateTitle()}</h2>
