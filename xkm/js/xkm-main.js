@@ -19,6 +19,65 @@ function formatTime(date) {
     };
     tick();
     setInterval(tick, 1000);
+
+    // 单击：跳转目标网址；双击：弹出编辑
+    let clickPending = null;
+    clock.addEventListener("click", (e) => {
+      clearTimeout(clickPending);
+      clickPending = setTimeout(() => {
+        clickPending = null;
+        const settings = typeof Storage !== "undefined" ? Storage.getSettings() : {};
+        const url = (settings.targetUrl || "").trim();
+        if (url) {
+          window.open(url, "_blank", "noopener,noreferrer");
+        }
+      }, 300);
+    });
+    clock.addEventListener("dblclick", (e) => {
+      e.preventDefault();
+      clearTimeout(clickPending);
+      clickPending = null;
+      openTargetUrlPopup();
+    });
+
+    // 有目标网址时显示可点击样式
+    function updateClockClickable() {
+      const settings = typeof Storage !== "undefined" ? Storage.getSettings() : {};
+      const hasUrl = (settings.targetUrl || "").trim().length > 0;
+      clock.classList.toggle("xkm-clock-clickable", hasUrl);
+    }
+    updateClockClickable();
+
+    // 目标网址弹窗：双击打开
+    function openTargetUrlPopup() {
+      const popup = document.getElementById("target-url-popup");
+      const input = document.getElementById("target-url-edit-input");
+      if (!popup || !input) return;
+      const settings = typeof Storage !== "undefined" ? Storage.getSettings() : {};
+      input.value = settings.targetUrl || "";
+      popup.classList.remove("hidden");
+      input.focus();
+      input.select();
+    }
+
+    function saveTargetUrlAndClose() {
+      const popup = document.getElementById("target-url-popup");
+      const input = document.getElementById("target-url-edit-input");
+      if (!popup || !input) return;
+      const value = input.value.trim();
+      if (typeof Storage !== "undefined") Storage.saveSettings({ targetUrl: value });
+      popup.classList.add("hidden");
+      updateClockClickable();
+    }
+
+    document.getElementById("target-url-popup-ok")?.addEventListener("click", saveTargetUrlAndClose);
+    document.querySelector(".target-url-popup-backdrop")?.addEventListener("click", saveTargetUrlAndClose);
+    document.getElementById("target-url-edit-input")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        saveTargetUrlAndClose();
+      }
+    });
   }
 
   function initMusicPlayer() {

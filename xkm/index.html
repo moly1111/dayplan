@@ -28,6 +28,19 @@
     <!-- 顶部时间 -->
     <div id="xkm-clock" class="xkm-clock">--:--:--</div>
 
+    <!-- 目标网址编辑弹窗（双击时间打开） -->
+    <div id="target-url-popup" class="target-url-popup hidden">
+        <div class="target-url-popup-backdrop"></div>
+        <div class="target-url-popup-box">
+            <div class="target-url-popup-title">目标网址</div>
+            <p class="target-url-popup-hint">单击时间跳转，双击时间编辑</p>
+            <input type="url" id="target-url-edit-input" class="target-url-edit-input" placeholder="https://..." autocomplete="off">
+            <div class="target-url-popup-actions">
+                <button type="button" id="target-url-popup-ok" class="target-url-popup-btn">确定</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 音乐按钮 -->
     <div class="music-btn-wrapper">
         <button id="music-btn" class="music-btn" title="背景音乐">♪</button>
@@ -168,7 +181,7 @@
                     <span id="streak-days" class="streak-days"></span>
                 </div>
                 <div class="quick-tasks-wrapper">
-                    <button id="quick-tasks-btn" class="quick-tasks-btn">快捷任务</button>
+                    <button id="quick-tasks-btn" class="quick-tasks-btn">✦</button>
                     <div id="quick-tasks-panel" class="quick-tasks-panel hidden">
                         <div class="quick-tasks-title">常用任务</div>
                         <div id="quick-tasks-list" class="quick-tasks-list"></div>
