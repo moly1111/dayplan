@@ -37,7 +37,9 @@ const Storage = {
                 ],
                 // 今日全部完成庆祝效果（仅 xkm 使用）
                 todayCheerSound: false,
-                todayConfetti: false
+                todayConfetti: false,
+                // 目标网址（仅 xkm 使用）：点击时间时在新标签页打开
+                targetUrl: ''
             },
             tasks: {}
         };

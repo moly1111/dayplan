@@ -12,7 +12,7 @@
 - 设置：Light/Dark 主题、本地存储提醒、数据导入导出
 
 ## 子站与版本
-- `xkm/`：个人定制版，新增顶部时钟、AI 预估完成时间、总用时提示（API Key 本地存储，详见 `xkm/README.md`）
+- `xkm/`：个人定制版，新增顶部时钟、目标网址（单击跳转/双击编辑）、AI 预估完成时间、总用时提示、快捷任务等（API Key 本地存储，详见 `xkm/README.md`）
 - `pro/`：工具实验区（如 focus-timer、discipline-path-map 等）
 - `next/`：Next.js 技术栈的演示版本
 
