@@ -222,8 +222,16 @@
             
             // 更新显示
             const totalTimeValue = totalTimeDisplay.querySelector('.total-time-value');
+            const totalTimeHms = totalTimeDisplay.querySelector('.total-time-hms');
             if (totalTimeValue) {
                 totalTimeValue.textContent = `${totalMinutes} 分钟`;
+                
+                // 旁边灰色小字：X 小时 Y 分钟
+                if (totalTimeHms) {
+                    const h = Math.floor(totalMinutes / 60);
+                    const m = totalMinutes % 60;
+                    totalTimeHms.textContent = `${h} 小时 ${m} 分钟`;
+                }
                 
                 // 如果总用时超过剩余时间，显示为红色
                 if (totalMinutes > remainingMinutes && remainingMinutes > 0) {
