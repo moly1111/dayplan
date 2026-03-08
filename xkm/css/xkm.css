@@ -359,6 +359,14 @@ body.dark .task-estimate-input {
     font-variant-numeric: tabular-nums;
 }
 
+.total-time-hms {
+    margin-left: 4px;
+    font-size: 12px;
+    color: var(--completed-text);
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+}
+
 .total-time-display.over-limit .total-time-value {
     color: #ff0000;
 }
