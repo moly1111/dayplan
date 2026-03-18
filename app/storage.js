@@ -74,7 +74,35 @@ const Storage = {
     // 获取指定日期的任务
     getTasksByDate(dateStr) {
         const data = this.getAllData();
-        return data.tasks[dateStr] || { pending: [], completed: [] };
+        const tasks = data.tasks[dateStr] || { pending: [], completed: [] };
+        // 兼容旧数据：确保 focus 相关字段存在
+        if (!tasks.hasOwnProperty('focus')) {
+            tasks.focus = null;
+        }
+        if (!tasks.hasOwnProperty('focusCollapsed')) {
+            tasks.focusCollapsed = false;
+        }
+        if (!tasks.hasOwnProperty('focusCompleted')) {
+            tasks.focusCompleted = false;
+        }
+        return tasks;
+    },
+    
+    // 设置 Focus 状态
+    setFocusState(dateStr, collapsed, completed) {
+        const tasks = this.getTasksByDate(dateStr);
+        if (collapsed !== undefined) tasks.focusCollapsed = collapsed;
+        if (completed !== undefined) tasks.focusCompleted = completed;
+        this.saveTasksByDate(dateStr, tasks);
+    },
+    
+    // 获取 Focus 状态
+    getFocusState(dateStr) {
+        const tasks = this.getTasksByDate(dateStr);
+        return {
+            collapsed: tasks.focusCollapsed || false,
+            completed: tasks.focusCompleted || false
+        };
     },
 
     // 保存指定日期的任务
@@ -93,9 +121,19 @@ const Storage = {
         return newId;
     },
 
-    // 完成任务（从 pending 移到 completed）
+    // 完成任务（从 pending 或 focus 移到 completed）
     completeTask(dateStr, taskId) {
         const tasks = this.getTasksByDate(dateStr);
+        // 先检查 focus 区域
+        if (tasks.focus && tasks.focus.id === taskId) {
+            const focusTask = tasks.focus;
+            focusTask.wasFocus = true; // 标记曾是 Focus 任务
+            tasks.completed.push(focusTask);
+            tasks.focus = null;
+            this.saveTasksByDate(dateStr, tasks);
+            return true;
+        }
+        // 再检查 pending 区域
         const taskIndex = tasks.pending.findIndex(t => t.id === taskId);
         if (taskIndex !== -1) {
             const task = tasks.pending.splice(taskIndex, 1)[0];
@@ -106,10 +144,63 @@ const Storage = {
         return false;
     },
 
-    // 删除任务
-    deleteTask(dateStr, taskId, fromCompleted = false) {
+    // 重排任务顺序（拖拽排序）
+    reorderTasks(dateStr, newOrder) {
         const tasks = this.getTasksByDate(dateStr);
-        if (fromCompleted) {
+        const reordered = [];
+        newOrder.forEach(id => {
+            const task = tasks.pending.find(t => t.id === id);
+            if (task) reordered.push(task);
+        });
+        tasks.pending = reordered;
+        this.saveTasksByDate(dateStr, tasks);
+    },
+
+    // 移动任务到 Focus 区域
+    moveToFocus(dateStr, taskId) {
+        const tasks = this.getTasksByDate(dateStr);
+        if (tasks.focus) return false; // Focus 已有任务，拒绝
+        const index = tasks.pending.findIndex(t => t.id === taskId);
+        if (index !== -1) {
+            tasks.focus = tasks.pending.splice(index, 1)[0];
+            this.saveTasksByDate(dateStr, tasks);
+            return true;
+        }
+        return false;
+    },
+
+    // 将任务从 Focus 移回 pending（到指定位置）
+    moveFromFocus(dateStr, insertIndex = 0) {
+        const tasks = this.getTasksByDate(dateStr);
+        if (!tasks.focus) return false;
+        tasks.pending.splice(insertIndex, 0, tasks.focus);
+        tasks.focus = null;
+        // 清除 Focus 状态
+        tasks.focusCompleted = false;
+        tasks.focusCollapsed = false;
+        this.saveTasksByDate(dateStr, tasks);
+        return true;
+    },
+
+    // 获取 Focus 任务
+    getFocusTask(dateStr) {
+        const tasks = this.getTasksByDate(dateStr);
+        return tasks.focus || null;
+    },
+
+    // 删除任务
+    deleteTask(dateStr, taskId, fromCompleted = false, fromFocus = false) {
+        const tasks = this.getTasksByDate(dateStr);
+        if (fromFocus) {
+            if (tasks.focus && tasks.focus.id === taskId) {
+                tasks.focus = null;
+                // 清除 Focus 状态
+                tasks.focusCompleted = false;
+                tasks.focusCollapsed = false;
+                this.saveTasksByDate(dateStr, tasks);
+                return true;
+            }
+        } else if (fromCompleted) {
             const index = tasks.completed.findIndex(t => t.id === taskId);
             if (index !== -1) {
                 tasks.completed.splice(index, 1);
@@ -138,6 +229,13 @@ const Storage = {
                 return true;
             }
         } else {
+            // 先检查 Focus 任务
+            if (tasks.focus && tasks.focus.id === taskId) {
+                tasks.focus.text = newText;
+                this.saveTasksByDate(dateStr, tasks);
+                return true;
+            }
+            // 再检查 pending 任务
             const task = tasks.pending.find(t => t.id === taskId);
             if (task) {
                 task.text = newText;
@@ -152,6 +250,7 @@ const Storage = {
     getNextTaskId(dateStr) {
         const tasks = this.getTasksByDate(dateStr);
         const allTasks = [...tasks.pending, ...tasks.completed];
+        if (tasks.focus) allTasks.push(tasks.focus);
         if (allTasks.length === 0) return 1;
         return Math.max(...allTasks.map(t => t.id)) + 1;
     },
@@ -165,13 +264,13 @@ const Storage = {
     // 检查日期是否有任务
     hasTasks(dateStr) {
         const tasks = this.getTasksByDate(dateStr);
-        return tasks.pending.length > 0 || tasks.completed.length > 0;
+        return tasks.pending.length > 0 || tasks.completed.length > 0 || tasks.focus !== null;
     },
 
-    // 检查日期是否有未完成任务
+    // 检查日期是否有未完成任务（包括 Focus）
     hasPendingTasks(dateStr) {
         const tasks = this.getTasksByDate(dateStr);
-        return tasks.pending.length > 0;
+        return tasks.pending.length > 0 || tasks.focus !== null;
     },
 
     // 检查日期是否有已完成任务
@@ -212,26 +311,55 @@ const Storage = {
             if (!data.settings || !data.tasks) {
                 throw new Error('Invalid data structure');
             }
-            // 验证 settings 结构
-            if (typeof data.settings.showWarning !== 'boolean' ||
-                typeof data.settings.killAnimation !== 'boolean' ||
-                typeof data.settings.killSound !== 'boolean' ||
-                !['light', 'dark'].includes(data.settings.theme)) {
-                throw new Error('Invalid settings structure');
+            // 验证 settings 结构（兼容旧格式，缺失的字段使用默认值）
+            if (typeof data.settings.showWarning !== 'boolean') {
+                data.settings.showWarning = true;
             }
-            // 验证 tasks 结构
+            if (typeof data.settings.killAnimation !== 'boolean') {
+                data.settings.killAnimation = true;
+            }
+            if (typeof data.settings.killSound !== 'boolean') {
+                data.settings.killSound = true;
+            }
+            if (!['light', 'dark'].includes(data.settings.theme)) {
+                data.settings.theme = 'light';
+            }
+            
+            // 验证并补全 tasks 结构
             for (const dateStr in data.tasks) {
-                if (!Array.isArray(data.tasks[dateStr].pending) ||
-                    !Array.isArray(data.tasks[dateStr].completed)) {
-                    throw new Error('Invalid tasks structure');
+                const dayTasks = data.tasks[dateStr];
+                
+                // 确保基本数组存在
+                if (!Array.isArray(dayTasks.pending)) {
+                    dayTasks.pending = [];
                 }
+                if (!Array.isArray(dayTasks.completed)) {
+                    dayTasks.completed = [];
+                }
+                
+                // 兼容旧格式：补全 focus 相关字段
+                if (!dayTasks.hasOwnProperty('focus')) {
+                    dayTasks.focus = null;
+                }
+                if (!dayTasks.hasOwnProperty('focusCollapsed')) {
+                    dayTasks.focusCollapsed = false;
+                }
+                if (!dayTasks.hasOwnProperty('focusCompleted')) {
+                    dayTasks.focusCompleted = false;
+                }
+                
                 // 验证任务项结构
-                for (const task of [...data.tasks[dateStr].pending, ...data.tasks[dateStr].completed]) {
+                const allTasks = [...dayTasks.pending, ...dayTasks.completed];
+                if (dayTasks.focus) {
+                    allTasks.push(dayTasks.focus);
+                }
+                for (const task of allTasks) {
                     if (typeof task.id !== 'number' || typeof task.text !== 'string') {
                         throw new Error('Invalid task structure');
                     }
                 }
             }
+            
             // 数据验证通过，保存
             this.saveAllData(data);
             return true;

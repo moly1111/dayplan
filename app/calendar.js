@@ -7,6 +7,25 @@ const Calendar = {
     init() {
         this.selectedDate = new Date(); // 每次打开页面都默认选中今天
         this.render();
+        
+        // 双击日历区域跳回今天（整个 calendar-section 包括空白部分）
+        const calendarSection = document.querySelector('.calendar-section');
+        if (calendarSection) {
+            calendarSection.addEventListener('dblclick', () => {
+                this.goToToday();
+            });
+        }
+    },
+    
+    // 跳回今天
+    goToToday() {
+        const today = new Date();
+        this.currentDate = new Date(today);
+        this.selectedDate = new Date(today);
+        this.render();
+        if (window.Tasks) {
+            Tasks.loadTasks(this.formatDate(today));
+        }
     },
 
     // 渲染日历
