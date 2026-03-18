@@ -206,8 +206,15 @@
             const currentDateStr = Tasks.currentDateStr || Calendar.formatDate(new Date());
             const tasks = Storage.getTasksByDate(currentDateStr);
             
-            // 计算所有未完成任务的总预估时间
+            // 计算所有未完成任务的总预估时间（包含 Focus 任务）
             let totalMinutes = 0;
+            
+            // Focus 任务
+            if (tasks.focus && tasks.focus.estimatedMinutes && typeof tasks.focus.estimatedMinutes === 'number') {
+                totalMinutes += tasks.focus.estimatedMinutes;
+            }
+            
+            // Pending 任务
             tasks.pending.forEach(task => {
                 if (task.estimatedMinutes && typeof task.estimatedMinutes === 'number') {
                     totalMinutes += task.estimatedMinutes;
@@ -271,7 +278,24 @@
                 }
             }
             
+            // 检查是否是 Focus 任务
+            const currentDateStr = this.currentDateStr || Calendar.formatDate(new Date());
+            const tasksData = Storage.getTasksByDate(currentDateStr);
+            const isFocusTask = tasksData.focus && tasksData.focus.id === taskId;
+            
             originalCompleteTask.call(this, taskId);
+            
+            // 如果是 Focus 任务完成，折叠 Focus 区域并标记已完成
+            if (isFocusTask) {
+                const focusDetails = document.getElementById('focus-details');
+                if (focusDetails) {
+                    focusDetails.removeAttribute('open');
+                    focusDetails.classList.add('focus-completed');
+                }
+                // 保存状态到 Storage
+                Storage.setFocusState(currentDateStr, true, true);
+            }
+            
             // 延迟更新，等待动画完成
             setTimeout(() => {
                 updateTotalTime();
@@ -354,12 +378,19 @@
                             // 保存预估时间到任务数据
                             const currentDateStr = Tasks.currentDateStr || Calendar.formatDate(new Date());
                             const tasks = Storage.getTasksByDate(currentDateStr);
-                            const taskIndex = tasks.pending.findIndex(t => t.id === task.id);
-                            if (taskIndex !== -1) {
-                                tasks.pending[taskIndex].estimatedMinutes = minutes;
+                            
+                            // 检查是否是 Focus 任务
+                            if (tasks.focus && tasks.focus.id === task.id) {
+                                tasks.focus.estimatedMinutes = minutes;
                                 Storage.saveTasksByDate(currentDateStr, tasks);
-                                // 更新任务对象
                                 task.estimatedMinutes = minutes;
+                            } else {
+                                const taskIndex = tasks.pending.findIndex(t => t.id === task.id);
+                                if (taskIndex !== -1) {
+                                    tasks.pending[taskIndex].estimatedMinutes = minutes;
+                                    Storage.saveTasksByDate(currentDateStr, tasks);
+                                    task.estimatedMinutes = minutes;
+                                }
                             }
                             
                             // 显示结果（成功时清除错误状态）
@@ -767,16 +798,26 @@
                     // 更新任务数据
                     const currentDateStr = Tasks.currentDateStr || Calendar.formatDate(new Date());
                     const tasks = Storage.getTasksByDate(currentDateStr);
-                    const taskIndex = tasks.pending.findIndex(t => t.id === task.id);
-                    if (taskIndex !== -1) {
-                        tasks.pending[taskIndex].estimatedMinutes = newMinutes;
+                    
+                    let updated = false;
+                    
+                    // 检查是否是 Focus 任务
+                    if (tasks.focus && tasks.focus.id === task.id) {
+                        tasks.focus.estimatedMinutes = newMinutes;
+                        updated = true;
+                    } else {
+                        const taskIndex = tasks.pending.findIndex(t => t.id === task.id);
+                        if (taskIndex !== -1) {
+                            tasks.pending[taskIndex].estimatedMinutes = newMinutes;
+                            updated = true;
+                        }
+                    }
+                    
+                    if (updated) {
                         Storage.saveTasksByDate(currentDateStr, tasks);
-                        // 更新任务对象
                         task.estimatedMinutes = newMinutes;
-                        // 更新显示
                         estimateDisplay.textContent = `${newMinutes} 分钟`;
                         estimateDisplay.classList.remove('error');
-                        // 更新总用时
                         updateTotalTime();
                     }
                 } else {

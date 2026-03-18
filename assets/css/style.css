@@ -544,12 +544,84 @@ body {
     background-color: var(--bg-color);
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    transition: transform 0.3s, opacity 0.3s;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    cursor: grab;
+}
+
+.task-item:active {
+    cursor: grabbing;
 }
 
 .task-item.killing {
     transform: scale(0.8);
     opacity: 0;
+}
+
+/* 拖拽排序时，整个页面使用 grabbing 光标 */
+body.dragging-active {
+    cursor: grabbing !important;
+    user-select: none;
+}
+
+body.dragging-active * {
+    cursor: grabbing !important;
+}
+
+/* 拖拽排序时，其他任务的位移动画 */
+.tasks-list.dragging-active .task-item:not(.dragging) {
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.task-item.dragging {
+    transform: scale(0.95);
+    opacity: 0.95;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    cursor: grabbing !important;
+    user-select: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.task-placeholder {
+    background-color: var(--hover-bg);
+    border: 2px dashed var(--today-border);
+    border-radius: 4px;
+    box-sizing: border-box;
+    opacity: 0.6;
+    transition: height 0.2s ease;
+}
+
+.task-item.drag-to-tomorrow {
+    background-color: #e8f5e9 !important;
+    border: 2px solid #4caf50 !important;
+    opacity: 0.9;
+}
+
+.task-item.drag-to-tomorrow::after {
+    content: "→ 明天";
+    position: absolute;
+    right: -60px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #4caf50;
+    font-weight: 600;
+}
+
+.task-item.drag-to-yesterday {
+    background-color: #fff3e0 !important;
+    border: 2px solid #ff9800 !important;
+    opacity: 0.9;
+}
+
+.task-item.drag-to-yesterday::after {
+    content: "← 昨天";
+    position: absolute;
+    left: -60px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #ff9800;
+    font-weight: 600;
 }
 
 .task-item-content {
@@ -666,6 +738,7 @@ body {
 
 .completed-section .task-item {
     opacity: 0.7;
+    cursor: default;
 }
 
 .completed-section .task-text {

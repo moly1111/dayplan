@@ -714,3 +714,79 @@ body.dark .task-estimate-input {
     opacity: 0.9;
 }
 
+/* Focus 区域 */
+.focus-section {
+    margin: 12px 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.focus-header {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: var(--text-color) !important;
+    margin-bottom: 10px !important;
+    text-align: left !important;
+    padding-left: 16px !important;
+    letter-spacing: 2px !important;
+    font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
+    cursor: pointer !important;
+    list-style: none !important;
+}
+
+.focus-header::-webkit-details-marker {
+    display: none !important;
+}
+
+.focus-section:not([open]) .focus-header {
+    color: var(--completed-text) !important;
+    margin-bottom: 0 !important;
+}
+
+.focus-section.focus-completed .focus-header::after {
+    content: "🎉" !important;
+    font-size: 12px !important;
+    margin-left: 8px !important;
+}
+
+.focus-task-container {
+    min-height: 48px !important;
+    position: relative !important;
+}
+
+.focus-task-container:empty {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 48px !important;
+    color: #999 !important;
+    font-size: 13px !important;
+    border: 2px dashed #ccc !important;
+    border-radius: 8px !important;
+    background-color: var(--task-bg) !important;
+}
+
+.focus-task-container:empty::after {
+    content: "长按拖动任务到此处" !important;
+}
+
+.focus-task-container .task-item {
+    margin: 0 !important;
+    background-color: var(--task-bg) !important;
+    border-radius: 8px !important;
+}
+
+.focus-task-container.drag-over {
+    background-color: rgba(74, 144, 226, 0.15) !important;
+    border-radius: 10px !important;
+}
+
+/* 分隔线 */
+.section-divider {
+    height: 2px !important;
+    background: linear-gradient(90deg, transparent, #e0e0e0, transparent) !important;
+    margin: 24px 0 !important;
+    border: none !important;
+}
+
