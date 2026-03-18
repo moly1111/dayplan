@@ -14,13 +14,10 @@
     <!-- 顶部提示条 -->
     <div id="warning-bar" class="warning-bar">
         <div class="warning-content">
-            <p>本工具的所有数据仅存储在本地浏览器中，不会同步或上传到云端。<br>
-            清理浏览器数据或更换设备将导致数据永久丢失。<br>
-            建议定期使用右上角「备份」功能保存数据。<br>
-            Data is stored locally only and cannot be recovered if lost. Please back up regularly.</p>
+            <p data-i18n="warning.message">本工具的所有数据仅存储在本地浏览器中，不会同步或上传到云端。清理浏览器数据或更换设备将导致数据永久丢失。建议定期使用右上角「备份」功能保存数据。</p>
             <div class="warning-buttons">
-                <button id="close-warning">关闭</button>
-                <button id="dismiss-warning">永久关闭</button>
+                <button id="close-warning" data-i18n="warning.close">关闭</button>
+                <button id="dismiss-warning" data-i18n="warning.dismiss">永久关闭</button>
             </div>
         </div>
     </div>
@@ -32,25 +29,25 @@
     <div id="target-url-popup" class="target-url-popup hidden">
         <div class="target-url-popup-backdrop"></div>
         <div class="target-url-popup-box">
-            <div class="target-url-popup-title">目标网址</div>
-            <p class="target-url-popup-hint">单击时间跳转，双击时间编辑</p>
+            <div class="target-url-popup-title" data-i18n="targetUrl.title">目标网址</div>
+            <p class="target-url-popup-hint" data-i18n="targetUrl.hint">单击时间跳转，双击时间编辑</p>
             <input type="url" id="target-url-edit-input" class="target-url-edit-input" placeholder="https://..." autocomplete="off">
             <div class="target-url-popup-actions">
-                <button type="button" id="target-url-popup-ok" class="target-url-popup-btn">确定</button>
+                <button type="button" id="target-url-popup-ok" class="target-url-popup-btn" data-i18n="targetUrl.ok">确定</button>
             </div>
         </div>
     </div>
 
     <!-- 音乐按钮 -->
     <div class="music-btn-wrapper">
-        <button id="music-btn" class="music-btn" title="背景音乐">♪</button>
+        <button id="music-btn" class="music-btn" data-i18n-title="btn.music" title="背景音乐">♪</button>
         <div class="volume-slider-container">
             <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="50" orient="vertical">
         </div>
     </div>
 
     <!-- 设置按钮 -->
-    <button id="settings-btn" class="settings-btn" title="设置">
+    <button id="settings-btn" class="settings-btn" data-i18n-title="btn.settings" title="设置">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 12.5C11.3807 12.5 12.5 11.3807 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10C7.5 11.3807 8.61929 12.5 10 12.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M15.6066 12.5C15.4566 12.7333 15.2833 12.95 15.0916 13.1416L13.1416 15.0916C12.95 15.2833 12.7333 15.4566 12.5 15.6066V17.5C12.5 17.7761 12.2761 18 12 18H8C7.72386 18 7.5 17.7761 7.5 17.5V15.6066C7.26667 15.4566 7.05 15.2833 6.85833 15.0916L4.90833 13.1416C4.71667 12.95 4.54333 12.7333 4.39333 12.5H2.5C2.22386 12.5 2 12.2761 2 12V8C2 7.72386 2.22386 7.5 2.5 7.5H4.39333C4.54333 7.26667 4.71667 7.05 4.90833 6.85833L6.85833 4.90833C7.05 4.71667 7.26667 4.54333 7.5 4.39333V2.5C7.5 2.22386 7.72386 2 8 2H12C12.2761 2 12.5 2.22386 12.5 2.5V4.39333C12.7333 4.54333 12.95 4.71667 13.1416 4.90833L15.0916 6.85833C15.2833 7.05 15.4566 7.26667 15.6066 7.5H17.5C17.7761 7.5 18 7.72386 18 8V12C18 12.2761 17.7761 12.5 17.5 12.5H15.6066Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -60,84 +57,84 @@
     <!-- 设置面板 -->
     <div id="settings-panel" class="settings-panel hidden">
         <div class="settings-content">
-            <h3>设置</h3>
+            <h3 data-i18n="settings.title">设置</h3>
             
             <div class="settings-section">
-                <h4>数据</h4>
+                <h4 data-i18n="settings.data">数据</h4>
                 <div class="settings-item">
-                    <button id="export-btn">备份</button>
-                    <button id="import-btn">导入</button>
+                    <button id="export-btn" data-i18n="settings.backup">备份</button>
+                    <button id="import-btn" data-i18n="settings.import">导入</button>
                     <input type="file" id="import-input" accept=".json" style="display: none;">
                 </div>
             </div>
 
             <div class="settings-section">
-                <h4>顶部提醒</h4>
+                <h4 data-i18n="settings.topReminder">顶部提醒</h4>
                 <div class="settings-item">
                     <label>
                         <input type="checkbox" id="show-warning-checkbox">
-                        显示本地存储警告
+                        <span data-i18n="settings.showWarning">显示本地存储警告</span>
                     </label>
                 </div>
             </div>
 
             <div class="settings-section">
-                <h4>完成任务特效</h4>
+                <h4 data-i18n="settings.taskEffects">完成任务特效</h4>
                 <div class="settings-item">
                     <label>
                         <input type="checkbox" id="kill-animation-checkbox">
-                        动画开关
+                        <span data-i18n="settings.animation">动画开关</span>
                     </label>
                 </div>
                 <div class="settings-item">
                     <label>
                         <input type="checkbox" id="kill-sound-checkbox">
-                        音效开关
+                        <span data-i18n="settings.sound">音效开关</span>
                     </label>
                 </div>
                 <div class="settings-item">
                     <label>
                         <input type="checkbox" id="today-cheer-sound-checkbox">
-                        今日全部完成时播放欢呼
+                        <span data-i18n="settings.cheerOnComplete">今日全部完成时播放欢呼</span>
                     </label>
                 </div>
                 <div class="settings-item">
                     <label>
                         <input type="checkbox" id="today-confetti-checkbox">
-                        今日全部完成时飘落彩带
+                        <span data-i18n="settings.confettiOnComplete">今日全部完成时飘落彩带</span>
                     </label>
                 </div>
             </div>
 
             <div class="settings-section">
-                <h4>功能</h4>
+                <h4 data-i18n="settings.features">功能</h4>
                 <div class="settings-item">
                     <label>
                         <input type="checkbox" id="show-timer-checkbox">
-                        显示计时功能
+                        <span data-i18n="settings.showTimer">显示计时功能</span>
                     </label>
                 </div>
             </div>
 
             <div class="settings-section">
-                <h4>白噪音</h4>
+                <h4 data-i18n="settings.whiteNoise">白噪音</h4>
                 <div class="settings-item">
                     <label>
                         <input type="radio" name="white-noise" value="rain" id="white-noise-rain">
-                        雨声
+                        <span data-i18n="settings.rain">雨声</span>
                     </label>
                     <label>
                         <input type="radio" name="white-noise" value="fire" id="white-noise-fire">
-                        篝火
+                        <span data-i18n="settings.fire">篝火</span>
                     </label>
                 </div>
             </div>
 
             <div class="settings-section">
-                <h4>AI</h4>
+                <h4 data-i18n="settings.ai">AI</h4>
                 <div class="settings-item">
                     <label class="settings-label-stack">
-                        <span>DeepSeek API Key</span>
+                        <span data-i18n="settings.apiKey">DeepSeek API Key</span>
                         <input
                             type="password"
                             id="deepseek-api-key-input"
@@ -145,12 +142,12 @@
                             autocomplete="off"
                         >
                     </label>
-                    <p class="settings-note">仅保存在本地浏览器，不会上传到服务器。</p>
+                    <p class="settings-note" data-i18n="settings.apiKeyNote">仅保存在本地浏览器，不会上传到服务器。</p>
                 </div>
             </div>
 
             <div class="settings-section">
-                <h4>外观</h4>
+                <h4 data-i18n="settings.appearance">外观</h4>
                 <div class="settings-item">
                     <label>
                         <input type="radio" name="theme" value="light" id="theme-light">
@@ -159,6 +156,20 @@
                     <label>
                         <input type="radio" name="theme" value="dark" id="theme-dark">
                         Dark
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h4 data-i18n="settings.language">语言 / Language</h4>
+                <div class="settings-item">
+                    <label>
+                        <input type="radio" name="language" value="zh" id="lang-zh">
+                        中文
+                    </label>
+                    <label>
+                        <input type="radio" name="language" value="en" id="lang-en">
+                        English
                     </label>
                 </div>
             </div>
@@ -183,25 +194,25 @@
                 <div class="quick-tasks-wrapper">
                     <button id="quick-tasks-btn" class="quick-tasks-btn">✦</button>
                     <div id="quick-tasks-panel" class="quick-tasks-panel hidden">
-                        <div class="quick-tasks-title">常用任务</div>
+                        <div class="quick-tasks-title" data-i18n="quickTasks.title">常用任务</div>
                         <div id="quick-tasks-list" class="quick-tasks-list"></div>
                         <div class="quick-tasks-editor">
-                            <input type="text" id="quick-task-input" placeholder="输入常用任务内容">
-                            <button id="quick-task-add" class="quick-task-add-btn">添加</button>
+                            <input type="text" id="quick-task-input" data-i18n-placeholder="quickTasks.inputPlaceholder" placeholder="输入常用任务内容">
+                            <button id="quick-task-add" class="quick-task-add-btn" data-i18n="quickTasks.add">添加</button>
                         </div>
-                        <div class="quick-tasks-tip">数据仅存本地，可随时编辑</div>
+                        <div class="quick-tasks-tip" data-i18n="quickTasks.tip">数据仅存本地，可随时编辑</div>
                     </div>
                 </div>
             </div>
             
             <div class="task-input-container">
-                <input type="text" id="task-input" placeholder="添加计划，按 Enter 确认">
+                <input type="text" id="task-input" data-i18n-placeholder="task.inputPlaceholder" placeholder="添加计划，按 Enter 确认">
             </div>
 
             <div id="total-time-display" class="total-time-display">
-                <span class="total-time-label">总用时：</span>
-                <span class="total-time-value">0 分钟</span>
-                <span class="total-time-hms">0 小时 0 分钟</span>
+                <span class="total-time-label" data-i18n="task.totalTimeLabel">总用时：</span>
+                <span class="total-time-value">0 <span data-i18n="task.minutes">分钟</span></span>
+                <span class="total-time-hms"></span>
             </div>
 
             <!-- Focus 区域（可折叠） -->
@@ -252,6 +263,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <script src="../app/storage.js"></script>
+    <script src="../app/i18n.js"></script>
     <script src="../app/calendar.js"></script>
     <script src="../app/settings.js"></script>
     <!-- 先加载 xkm 专用扩展，再加载主逻辑，确保初始渲染就有预估按钮和时间 -->

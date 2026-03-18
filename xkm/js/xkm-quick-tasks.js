@@ -31,7 +31,7 @@
             if (tasks.length === 0) {
                 const emptyMsg = document.createElement('div');
                 emptyMsg.className = 'quick-tasks-empty';
-                emptyMsg.textContent = '暂无常用任务，在下方添加';
+                emptyMsg.textContent = typeof I18n !== 'undefined' ? I18n.t('quickTasks.empty') : '暂无常用任务，在下方添加';
                 quickTasksList.appendChild(emptyMsg);
                 return;
             }
@@ -78,8 +78,8 @@
 
                 const addBtn = document.createElement('button');
                 addBtn.className = 'quick-task-use-btn';
-                addBtn.textContent = '添加';
-                addBtn.title = '添加到今日任务';
+                addBtn.textContent = typeof I18n !== 'undefined' ? I18n.t('quickTasks.use') : '添加';
+                addBtn.title = typeof I18n !== 'undefined' ? I18n.t('quickTasks.useTitle') : '添加到今日任务';
                 addBtn.onclick = (e) => {
                     e.stopPropagation();
                     this.addToToday(task, estimatedMinutes);
@@ -96,8 +96,8 @@
 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'quick-task-delete-btn';
-                deleteBtn.textContent = '删除';
-                deleteBtn.title = '删除此任务';
+                deleteBtn.textContent = typeof I18n !== 'undefined' ? I18n.t('quickTasks.delete') : '删除';
+                deleteBtn.title = typeof I18n !== 'undefined' ? I18n.t('quickTasks.deleteTitle') : '删除此任务';
                 deleteBtn.onclick = (e) => {
                     e.stopPropagation();
                     this.deleteTask(index);
@@ -168,7 +168,8 @@
             const currentMinutes = typeof taskObj === 'object' ? taskObj.estimatedMinutes : null;
             const currentMinutesValue = currentMinutes !== null && currentMinutes !== undefined ? currentMinutes : 0;
             
-            const newMinutesStr = prompt('修改预估时间（分钟）：', currentMinutesValue);
+            const promptText = typeof I18n !== 'undefined' ? I18n.t('edit.estimatePrompt') : '修改预估时间（分钟）：';
+            const newMinutesStr = prompt(promptText, currentMinutesValue);
             if (newMinutesStr !== null) {
                 const newMinutes = parseInt(newMinutesStr, 10);
                 if (!isNaN(newMinutes) && newMinutes >= 0) {
@@ -182,7 +183,8 @@
                     this.saveQuickTasks(tasks);
                     this.loadQuickTasks();
                 } else {
-                    alert('请输入有效的数字（≥0）');
+                    const errMsg = typeof I18n !== 'undefined' ? I18n.t('edit.invalidNumber') : '请输入有效的数字（≥0）';
+                    alert(errMsg);
                 }
             }
         },
@@ -216,7 +218,8 @@
 
         // 删除任务
         deleteTask(index) {
-            if (confirm('确定要删除这个常用任务吗？')) {
+            const confirmMsg = typeof I18n !== 'undefined' ? I18n.t('quickTasks.deleteConfirm') : '确定要删除这个常用任务吗？';
+            if (confirm(confirmMsg)) {
                 const tasks = this.getQuickTasks();
                 tasks.splice(index, 1);
                 this.saveQuickTasks(tasks);
@@ -231,7 +234,8 @@
 
             const text = input.value.trim();
             if (!text) {
-                alert('请输入任务内容');
+                const msg = typeof I18n !== 'undefined' ? I18n.t('quickTasks.inputRequired') : '请输入任务内容';
+                alert(msg);
                 return;
             }
 

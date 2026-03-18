@@ -231,13 +231,18 @@
             const totalTimeValue = totalTimeDisplay.querySelector('.total-time-value');
             const totalTimeHms = totalTimeDisplay.querySelector('.total-time-hms');
             if (totalTimeValue) {
-                totalTimeValue.textContent = `${totalMinutes} 分钟`;
+                const minutesUnit = typeof I18n !== 'undefined' ? I18n.t('task.minutes') : '分钟';
+                totalTimeValue.textContent = `${totalMinutes} ${minutesUnit}`;
                 
                 // 旁边灰色小字：X 小时 Y 分钟
                 if (totalTimeHms) {
                     const h = Math.floor(totalMinutes / 60);
                     const m = totalMinutes % 60;
-                    totalTimeHms.textContent = `${h} 小时 ${m} 分钟`;
+                    if (typeof I18n !== 'undefined') {
+                        totalTimeHms.textContent = I18n.t('task.hms').replace('{hours}', h).replace('{minutes}', m);
+                    } else {
+                        totalTimeHms.textContent = `${h} 小时 ${m} 分钟`;
+                    }
                 }
                 
                 // 如果总用时超过剩余时间，显示为红色
@@ -337,8 +342,8 @@
                     // 创建"预期完成时间"按钮
                     const estimateBtn = document.createElement('button');
                     estimateBtn.className = 'task-estimate-btn';
-                    estimateBtn.textContent = '预期完成时间';
-                    estimateBtn.title = '点击获取 AI 预估完成时间';
+                    estimateBtn.textContent = typeof I18n !== 'undefined' ? I18n.t('task.estimateBtn') : '预期完成时间';
+                    estimateBtn.title = typeof I18n !== 'undefined' ? I18n.t('task.estimateBtnTitle') : '点击获取 AI 预估完成时间';
                     
                     // 创建显示区域（绿色框）
                     const estimateDisplay = document.createElement('div');
@@ -347,7 +352,8 @@
                     
                     // 如果任务已有保存的预估时间，直接显示
                     if (task.estimatedMinutes) {
-                        estimateDisplay.textContent = `${task.estimatedMinutes} 分钟`;
+                        const minutesUnit = typeof I18n !== 'undefined' ? I18n.t('task.minutes') : '分钟';
+                        estimateDisplay.textContent = `${task.estimatedMinutes} ${minutesUnit}`;
                         estimateDisplay.style.display = 'block';
                         // 添加编辑图标提示
                         estimateDisplay.title = '双击可编辑时间';
@@ -363,7 +369,7 @@
                         
                         // 显示加载状态
                         estimateBtn.disabled = true;
-                        estimateBtn.textContent = '预估中...';
+                        estimateBtn.textContent = typeof I18n !== 'undefined' ? I18n.t('task.estimating') : '预估中...';
                         estimateDisplay.style.display = 'none';
                         
                         try {
@@ -395,15 +401,16 @@
                             
                             // 显示结果（成功时清除错误状态）
                             estimateDisplay.classList.remove('error');
-                            estimateDisplay.textContent = `${minutes} 分钟`;
+                            const minutesUnit = typeof I18n !== 'undefined' ? I18n.t('task.minutes') : '分钟';
+                            estimateDisplay.textContent = `${minutes} ${minutesUnit}`;
                             estimateDisplay.style.display = 'block';
-                            estimateBtn.textContent = '预期完成时间';
+                            estimateBtn.textContent = typeof I18n !== 'undefined' ? I18n.t('task.estimateBtn') : '预期完成时间';
                             
                             // 更新总用时
                             updateTotalTime();
                         } catch (error) {
                             // 显示错误信息（保持红色状态，不再自动恢复为绿色）
-                            estimateDisplay.textContent = '预估失败';
+                            estimateDisplay.textContent = typeof I18n !== 'undefined' ? I18n.t('task.estimateFailed') : '预估失败';
                             estimateDisplay.style.display = 'block';
                             estimateDisplay.classList.add('error');
                             console.error('预估时间失败:', error);
@@ -433,8 +440,8 @@
                     // 创建计时按钮
                     const timerBtn = document.createElement('button');
                     timerBtn.className = 'task-timer-btn';
-                    timerBtn.textContent = '计时';
-                    timerBtn.title = '点击开始计时';
+                    timerBtn.textContent = typeof I18n !== 'undefined' ? I18n.t('task.timer') : '计时';
+                    timerBtn.title = typeof I18n !== 'undefined' ? I18n.t('task.timerTitle') : '点击开始计时';
                     
                     // 创建计时显示区域
                     const timerDisplay = document.createElement('div');
@@ -556,7 +563,8 @@
                                 updateTimerDisplay();
                             } else if (newSeconds === null) {
                                 // 格式错误，恢复原值
-                                alert('格式错误！请输入 mm:ss 格式（例如：05:30）');
+                                const errMsg = typeof I18n !== 'undefined' ? I18n.t('task.timerFormatError') : '格式错误！请输入 mm:ss 格式（例如：05:30）';
+                                alert(errMsg);
                                 parent.replaceChild(timer.displayElement, input);
                             } else {
                                 // 没有变化，直接恢复
@@ -790,7 +798,8 @@
         // 编辑预估时间
         Tasks.editEstimatedTime = function(task, estimateDisplay) {
             const currentMinutes = task.estimatedMinutes || 0;
-            const newMinutesStr = prompt('修改预估时间（分钟）：', currentMinutes);
+            const promptText = typeof I18n !== 'undefined' ? I18n.t('edit.estimatePrompt') : '修改预估时间（分钟）：';
+            const newMinutesStr = prompt(promptText, currentMinutes);
             
             if (newMinutesStr !== null) {
                 const newMinutes = parseInt(newMinutesStr, 10);
@@ -816,12 +825,14 @@
                     if (updated) {
                         Storage.saveTasksByDate(currentDateStr, tasks);
                         task.estimatedMinutes = newMinutes;
-                        estimateDisplay.textContent = `${newMinutes} 分钟`;
+                        const minutesUnit = typeof I18n !== 'undefined' ? I18n.t('task.minutes') : '分钟';
+                        estimateDisplay.textContent = `${newMinutes} ${minutesUnit}`;
                         estimateDisplay.classList.remove('error');
                         updateTotalTime();
                     }
                 } else {
-                    alert('请输入有效的数字（≥0）');
+                    const errMsg = typeof I18n !== 'undefined' ? I18n.t('edit.invalidNumber') : '请输入有效的数字（≥0）';
+                    alert(errMsg);
                 }
             }
         };

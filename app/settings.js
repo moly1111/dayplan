@@ -65,6 +65,22 @@ const Settings = {
         if (deepseekApiKeyInput) {
             deepseekApiKeyInput.value = settings.deepseekApiKey || '';
         }
+        
+        // 语言设置
+        const langZh = document.getElementById('lang-zh');
+        const langEn = document.getElementById('lang-en');
+        if (langZh) {
+            langZh.checked = settings.language === 'zh' || !settings.language;
+        }
+        if (langEn) {
+            langEn.checked = settings.language === 'en';
+        }
+        
+        // 初始化 I18n
+        if (typeof I18n !== 'undefined') {
+            I18n.currentLang = settings.language || 'zh';
+            I18n.applyLanguage();
+        }
     },
 
     // 绑定事件
@@ -236,6 +252,32 @@ const Settings = {
                 }
             });
         }
+        
+        // 语言切换
+        const langZh = document.getElementById('lang-zh');
+        const langEn = document.getElementById('lang-en');
+        
+        if (langZh) {
+            langZh.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    Storage.saveSettings({ language: 'zh' });
+                    if (typeof I18n !== 'undefined') {
+                        I18n.setLang('zh');
+                    }
+                }
+            });
+        }
+        
+        if (langEn) {
+            langEn.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    Storage.saveSettings({ language: 'en' });
+                    if (typeof I18n !== 'undefined') {
+                        I18n.setLang('en');
+                    }
+                }
+            });
+        }
 
         // DeepSeek API Key 输入
         if (deepseekApiKeyInput) {
@@ -286,7 +328,8 @@ const Settings = {
                             if (window.Calendar) {
                                 Calendar.update();
                             }
-                            alert('导入成功！');
+                            const msg = (typeof I18n !== 'undefined') ? I18n.t('import.success') : '导入成功！';
+                            alert(msg);
                         }
                     };
                     reader.readAsText(file);
