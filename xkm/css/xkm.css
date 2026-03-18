@@ -755,7 +755,7 @@ body.dark .task-estimate-input {
     position: relative !important;
 }
 
-.focus-task-container:empty {
+.focus-empty-hint {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -765,10 +765,7 @@ body.dark .task-estimate-input {
     border: 2px dashed #ccc !important;
     border-radius: 8px !important;
     background-color: var(--task-bg) !important;
-}
-
-.focus-task-container:empty::after {
-    content: "长按拖动任务到此处" !important;
+    cursor: pointer;
 }
 
 .focus-task-container .task-item {

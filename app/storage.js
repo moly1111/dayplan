@@ -39,7 +39,9 @@ const Storage = {
                 todayCheerSound: false,
                 todayConfetti: false,
                 // 目标网址（仅 xkm 使用）：点击时间时在新标签页打开
-                targetUrl: ''
+                targetUrl: '',
+                // 语言设置
+                language: 'zh'
             },
             tasks: {}
         };
@@ -51,7 +53,8 @@ const Storage = {
             localStorage.setItem('todoApp', JSON.stringify(data));
         } catch (e) {
             console.error('Failed to save data:', e);
-            alert('保存数据失败，可能是存储空间不足');
+            const msg = (typeof I18n !== 'undefined') ? I18n.t('error.saveFailed') : '保存数据失败，可能是存储空间不足';
+            alert(msg);
         }
     },
 
@@ -365,7 +368,8 @@ const Storage = {
             return true;
         } catch (e) {
             console.error('Failed to import data:', e);
-            alert('导入失败：数据格式不正确');
+            const msg = (typeof I18n !== 'undefined') ? I18n.t('import.failed') : '导入失败：数据格式不正确';
+            alert(msg);
             return false;
         }
     }

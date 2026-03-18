@@ -97,7 +97,12 @@ const Tasks = {
                 }
             }
             
-            // Focus 为空时，双击可直接创建任务
+            // Focus 为空时，添加提示并支持双击创建
+            const hint = document.createElement('div');
+            hint.className = 'focus-empty-hint';
+            hint.textContent = (typeof I18n !== 'undefined') ? I18n.t('focus.dragHint') : '长按拖动任务到此处';
+            container.appendChild(hint);
+            
             container.ondblclick = () => {
                 this.createFocusTask();
             };
@@ -115,7 +120,8 @@ const Tasks = {
     
     // 直接创建 Focus 任务
     createFocusTask() {
-        const text = prompt('输入 Focus 任务：');
+        const promptText = (typeof I18n !== 'undefined') ? I18n.t('focus.inputPrompt') : '输入 Focus 任务：';
+        const text = prompt(promptText);
         if (!text || !text.trim()) return;
         
         // 创建新任务并直接放入 Focus
@@ -268,10 +274,12 @@ const Tasks = {
             // 右拖 - 移到明天
             state.moveToTomorrow = true;
             state.dragEl.classList.add('drag-to-tomorrow');
+            state.dragEl.dataset.dragHint = (typeof I18n !== 'undefined') ? I18n.t('drag.tomorrow') : '→ 明天';
         } else if (deltaX < -dragThreshold) {
             // 左拖 - 移到昨天
             state.moveToYesterday = true;
             state.dragEl.classList.add('drag-to-yesterday');
+            state.dragEl.dataset.dragHint = (typeof I18n !== 'undefined') ? I18n.t('drag.yesterday') : '← 昨天';
         }
 
         // 检测当前悬停在哪个区域
@@ -742,7 +750,7 @@ const Tasks = {
         const selectedDate = new Date(this.currentDateStr + 'T00:00:00');
         
         if (Calendar.isSameDate(selectedDate, today)) {
-            titleEl.textContent = 'Today';
+            titleEl.textContent = (typeof I18n !== 'undefined') ? I18n.t('today') : 'Today';
         } else {
             const year = selectedDate.getFullYear();
             const month = String(selectedDate.getMonth() + 1).padStart(2, '0');

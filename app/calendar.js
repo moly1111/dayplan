@@ -46,7 +46,16 @@ const Calendar = {
         
         const monthText = document.createElement('div');
         monthText.className = 'calendar-month';
-        monthText.textContent = `${year}年${month + 1}月`;
+        // 多语言月份格式
+        if (typeof I18n !== 'undefined') {
+            const format = I18n.t('calendar.monthFormat');
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            monthText.textContent = format
+                .replace('{year}', year)
+                .replace('{month}', I18n.currentLang === 'en' ? monthNames[month] : (month + 1));
+        } else {
+            monthText.textContent = `${year}年${month + 1}月`;
+        }
         
         const nextBtn = document.createElement('button');
         nextBtn.textContent = '→';
@@ -57,7 +66,7 @@ const Calendar = {
         header.appendChild(nextBtn);
 
         // 创建星期标题
-        const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+        const weekDays = (typeof I18n !== 'undefined') ? I18n.t('calendar.weekdays') : ['日', '一', '二', '三', '四', '五', '六'];
         const weekHeader = document.createElement('div');
         weekHeader.className = 'calendar-grid';
         weekDays.forEach(day => {
