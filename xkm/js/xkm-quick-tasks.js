@@ -52,8 +52,9 @@
                 if (estimatedMinutes !== null && estimatedMinutes !== undefined) {
                     const timeBadge = document.createElement('span');
                     timeBadge.className = 'quick-task-time-badge';
-                    timeBadge.textContent = `${estimatedMinutes}分钟`;
-                    timeBadge.title = '双击可编辑时间';
+                    const minUnit = typeof I18n !== 'undefined' ? I18n.t('task.minutes') : '分钟';
+                    timeBadge.textContent = `${estimatedMinutes}${minUnit}`;
+                    timeBadge.title = typeof I18n !== 'undefined' ? I18n.t('quickTasks.editTimeTitle') : '双击可编辑时间';
                     timeBadge.style.cursor = 'pointer';
                     timeBadge.ondblclick = (e) => {
                         e.stopPropagation();
@@ -64,8 +65,8 @@
                     // 如果没有预估时间，显示"预估"按钮
                     const estimateBtn = document.createElement('span');
                     estimateBtn.className = 'quick-task-estimate-btn';
-                    estimateBtn.textContent = '预估';
-                    estimateBtn.title = '点击预估时间';
+                    estimateBtn.textContent = typeof I18n !== 'undefined' ? I18n.t('quickTasks.estimate') : '预估';
+                    estimateBtn.title = typeof I18n !== 'undefined' ? I18n.t('quickTasks.estimateTitle') : '点击预估时间';
                     estimateBtn.onclick = async (e) => {
                         e.stopPropagation();
                         await this.estimateTaskTime(index, taskObj);
@@ -87,8 +88,8 @@
 
                 const editBtn = document.createElement('button');
                 editBtn.className = 'quick-task-edit-btn';
-                editBtn.textContent = '编辑';
-                editBtn.title = '编辑此任务';
+                editBtn.textContent = typeof I18n !== 'undefined' ? I18n.t('quickTasks.edit') : '编辑';
+                editBtn.title = typeof I18n !== 'undefined' ? I18n.t('quickTasks.editTitle') : '编辑此任务';
                 editBtn.onclick = (e) => {
                     e.stopPropagation();
                     this.editTask(index, taskObj);
@@ -149,7 +150,8 @@
             const currentText = typeof currentTaskObj === 'string' ? currentTaskObj : currentTaskObj.text;
             const currentMinutes = typeof currentTaskObj === 'object' ? currentTaskObj.estimatedMinutes : null;
             
-            const newText = prompt('编辑任务内容：', currentText);
+            const editPrompt = typeof I18n !== 'undefined' ? I18n.t('quickTasks.editPrompt') : '编辑任务内容：';
+            const newText = prompt(editPrompt, currentText);
             if (newText !== null && newText.trim() && newText.trim() !== currentText) {
                 const tasks = this.getQuickTasks();
                 // 保持原有的预估时间
@@ -196,7 +198,8 @@
             
             try {
                 if (typeof DeepSeekAPI === 'undefined' || !DeepSeekAPI.estimateTaskTime) {
-                    alert('DeepSeek API 未配置，请在设置中填写 API Key');
+                    const msg = typeof I18n !== 'undefined' ? I18n.t('quickTasks.apiNotConfigured') : 'DeepSeek API 未配置，请在设置中填写 API Key';
+                    alert(msg);
                     return;
                 }
                 
@@ -211,8 +214,10 @@
                 this.saveQuickTasks(tasks);
                 this.loadQuickTasks();
             } catch (error) {
-                console.error('预估时间失败:', error);
-                alert('预估时间失败：' + (error.message || '未知错误'));
+                console.error('Estimate time failed:', error);
+                const errPrefix = typeof I18n !== 'undefined' ? I18n.t('quickTasks.estimateFailed') : '预估时间失败：';
+                const unknownErr = typeof I18n !== 'undefined' ? I18n.t('error.unknown') : '未知错误';
+                alert(errPrefix + (error.message || unknownErr));
             }
         },
 
@@ -247,7 +252,8 @@
             });
             
             if (exists) {
-                alert('该任务已存在');
+                const msg = typeof I18n !== 'undefined' ? I18n.t('quickTasks.alreadyExists') : '该任务已存在';
+                alert(msg);
                 return;
             }
 

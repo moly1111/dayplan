@@ -78,6 +78,15 @@ const I18n = {
             'quickTasks.deleteTitle': '删除此任务',
             'quickTasks.deleteConfirm': '确定要删除这个常用任务吗？',
             'quickTasks.inputRequired': '请输入任务内容',
+            'quickTasks.editTimeTitle': '双击可编辑时间',
+            'quickTasks.estimate': '预估',
+            'quickTasks.estimateTitle': '点击预估时间',
+            'quickTasks.edit': '编辑',
+            'quickTasks.editTitle': '编辑此任务',
+            'quickTasks.editPrompt': '编辑任务内容：',
+            'quickTasks.apiNotConfigured': 'DeepSeek API 未配置，请在设置中填写 API Key',
+            'quickTasks.estimateFailed': '预估时间失败：',
+            'quickTasks.alreadyExists': '该任务已存在',
             
             // 拖拽提示
             'drag.tomorrow': '→ 明天',
@@ -99,7 +108,8 @@ const I18n = {
             'import.failed': '导入失败：数据格式不正确',
             
             // 错误提示
-            'error.saveFailed': '保存数据失败，可能是存储空间不足'
+            'error.saveFailed': '保存数据失败，可能是存储空间不足',
+            'error.unknown': '未知错误'
         },
         en: {
             // Settings panel
@@ -176,6 +186,15 @@ const I18n = {
             'quickTasks.deleteTitle': 'Delete this task',
             'quickTasks.deleteConfirm': 'Are you sure you want to delete this quick task?',
             'quickTasks.inputRequired': 'Please enter task content',
+            'quickTasks.editTimeTitle': 'Double-click to edit time',
+            'quickTasks.estimate': 'Estimate',
+            'quickTasks.estimateTitle': 'Click to estimate time',
+            'quickTasks.edit': 'Edit',
+            'quickTasks.editTitle': 'Edit this task',
+            'quickTasks.editPrompt': 'Edit task content:',
+            'quickTasks.apiNotConfigured': 'DeepSeek API not configured. Please enter API Key in Settings.',
+            'quickTasks.estimateFailed': 'Estimate failed: ',
+            'quickTasks.alreadyExists': 'This task already exists',
             
             // Drag hints
             'drag.tomorrow': '→ Tomorrow',
@@ -197,7 +216,8 @@ const I18n = {
             'import.failed': 'Import failed: Invalid data format',
             
             // Error messages
-            'error.saveFailed': 'Failed to save data, storage may be full'
+            'error.saveFailed': 'Failed to save data, storage may be full',
+            'error.unknown': 'Unknown error'
         }
     },
     
