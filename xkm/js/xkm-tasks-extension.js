@@ -119,7 +119,8 @@
             const streak = calculateStreakDays();
             
             if (streak >= 2) {
-                streakDisplay.textContent = `连续${streak}天`;
+                const streakText = typeof I18n !== 'undefined' ? I18n.t('streak.days').replace('{days}', streak) : `连续${streak}天`;
+                streakDisplay.textContent = streakText;
                 streakDisplay.style.display = 'inline';
             } else {
                 streakDisplay.textContent = '';
