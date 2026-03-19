@@ -63,6 +63,7 @@ const I18n = {
             // 其他
             'completed': '已完成',
             'today': '今天',
+            'streak.days': '连续{days}天',
             'footer.backup': '数据丢失将无法找回，请定期备份并妥善保存。\nData cannot be recovered if lost. Please back up regularly.',
             
             // 快捷任务
@@ -160,6 +161,7 @@ const I18n = {
             // Other
             'completed': 'Completed',
             'today': 'Today',
+            'streak.days': '{days} day streak',
             'footer.backup': 'Data cannot be recovered if lost. Please back up regularly.',
             
             // Quick tasks
