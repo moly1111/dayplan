@@ -163,6 +163,10 @@ const Tasks = {
         longPressTimer: null,
         fromFocus: false, // 是否从 Focus 区域拖出
         moveToTomorrow: false, // 是否触发移到明天
+        // Focus 空态提示：拖拽时临时隐藏，避免蓝色占位符出现在提示下方
+        focusHintEl: null,
+        focusHintPrevDisplay: '',
+        focusHintHidden: false,
         moveToYesterday: false // 是否触发移到昨天
     },
 
@@ -313,6 +317,14 @@ const Tasks = {
             if (state.placeholder.parentNode) {
                 state.placeholder.remove();
             }
+            
+            // 离开 Focus 区域时，恢复空提示（如果之前为拖拽隐藏过）
+            if (state.targetContainer === focusContainer && state.focusHintHidden && state.focusHintEl) {
+                state.focusHintEl.style.display = state.focusHintPrevDisplay || '';
+                state.focusHintHidden = false;
+                state.focusHintEl = null;
+                state.focusHintPrevDisplay = '';
+            }
             state.targetContainer.classList.remove('dragging-active');
             
             // Focus 区域视觉反馈
@@ -333,6 +345,14 @@ const Tasks = {
 
         // Focus 区域特殊处理：只显示 placeholder，不做位置排序
         if (container === focusContainer) {
+            // Focus 为空时：临时隐藏灰色提示，让蓝色占位符出现在提示框的位置
+            const hintEl = tasks.focus ? null : focusContainer.querySelector('.focus-empty-hint');
+            if (hintEl && !state.focusHintHidden) {
+                state.focusHintEl = hintEl;
+                state.focusHintPrevDisplay = hintEl.style.display;
+                state.focusHintHidden = true;
+                hintEl.style.display = 'none';
+            }
             if (!state.placeholder.parentNode || state.placeholder.parentNode !== focusContainer) {
                 focusContainer.appendChild(state.placeholder);
             }
