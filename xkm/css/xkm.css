@@ -756,7 +756,7 @@ body.dark .task-estimate-input {
 }
 
 .focus-empty-hint {
-    display: flex !important;
+    display: flex;
     align-items: center !important;
     justify-content: center !important;
     min-height: 48px !important;
